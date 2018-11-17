@@ -70,7 +70,7 @@ class App extends React.Component<Props, any> {
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
-      <div className="App">
+      <GameCanvas>
       <BlockWrapper>
     {[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(a => <Block />)}
       </BlockWrapper>
@@ -79,13 +79,20 @@ class App extends React.Component<Props, any> {
           scrollamount="30"
           height="400"
           direction="up"
+          style={
+            {position: 'absolute', 
+              top: 0}
+          }
         >
           <marquee behavior="alternate" scrollamount="30">
             <span ref={this.ball}>●</span>
           </marquee>
         </marquee>
-        <marquee behavior="alternate" scrollamount="30">
-          <span ref={this.text}>--------------------</span>
+        <marquee behavior="alternate" scrollamount="30" style={
+            {position: 'absolute', 
+              top: 400}
+          }>
+          <span ref={this.text} >--------------------</span>
         </marquee>
         <p>ball</p>
         ball top: {ballTop} <br />
@@ -93,7 +100,7 @@ class App extends React.Component<Props, any> {
         <p>bar</p>
         left: {left} <br />
         right: {right}
-      </div>
+      </GameCanvas>
     );
   }
 }
@@ -101,6 +108,10 @@ class App extends React.Component<Props, any> {
 const BlockWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+`
+
+const GameCanvas = styled.div`
+  position: relative;
 `
 
 export default App;
