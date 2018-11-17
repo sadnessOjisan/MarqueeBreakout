@@ -14,37 +14,41 @@ interface Props {
 
 class App extends React.Component<Props, any> {
   private text = React.createRef<HTMLParagraphElement>();
+
   constructor(props:Props) {
     super(props);
     this.text = React.createRef();
     this.state = {
-      position: null
+      left: null, 
+      right: null
     };
   }
 
   componentDidMount() {
     setInterval(() => {
-      console.log(this.text.current);
-      console.log(this.text.current);
-      const left = this.text.current && this.text.current.getBoundingClientRect().left;
+      const left = this.text.current ? this.text.current.getBoundingClientRect().left:0;
+      const barWidth = this.text.current ? this.text.current.getBoundingClientRect().width:0; 
+      const right = left + barWidth
       this.setState({
-        position: left
+        left: left, 
+        right: right
       });
     }, 100);
   }
 
   render() {
     const {
-      position
+      left, right
     } = this.state;
     return ( <div className = "App" >
-      <h1> Hello CodeSandbox </h1>
-      <h2 > Start editing to see some magic happen! </h2>
       <marquee behavior = "alternate" scrollamount = "30" >
       <span ref = {this.text} >--------------------</span></marquee >
       left: {
-        position
-      } </div>
+        left
+      }  <br />
+      right: {
+        right
+      }</div>
     );
   }
 }
