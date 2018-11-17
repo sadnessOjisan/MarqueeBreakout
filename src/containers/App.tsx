@@ -1,4 +1,6 @@
 import * as React from "react";
+import Block from '../components/Block';
+import styled from "styled-components";
 
 declare global {
   namespace JSX {
@@ -69,6 +71,9 @@ class App extends React.Component<Props, any> {
     const ballRight = ballPosition.right;
     return (
       <div className="App">
+      <BlockWrapper>
+    {[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(a => <Block />)}
+      </BlockWrapper>
         <marquee
           behavior="alternate"
           scrollamount="30"
@@ -92,5 +97,10 @@ class App extends React.Component<Props, any> {
     );
   }
 }
+
+const BlockWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`
 
 export default App;
