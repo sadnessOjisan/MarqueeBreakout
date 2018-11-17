@@ -1,5 +1,5 @@
 import * as React from "react";
-import Block from '../components/Block';
+import Block from "../components/Block";
 import styled from "styled-components";
 
 declare global {
@@ -12,7 +12,19 @@ declare global {
 
 interface Props {}
 
-class App extends React.Component<Props, any> {
+interface Position {
+  top: number| null,
+  left: number| null,
+  bottom: number| null,
+  right: number| null,
+}
+
+interface State {
+  barPositon: Position, 
+  ballPosition: Position
+}
+
+class App extends React.Component<Props, State> {
   private text = React.createRef<HTMLParagraphElement>();
   private ball = React.createRef<HTMLParagraphElement>();
 
@@ -43,7 +55,7 @@ class App extends React.Component<Props, any> {
         const ballPosition = this.ball.current.getBoundingClientRect();
         const ballLeftPosition = ballPosition.left;
         const ballWidth = ballPosition.width;
-        const ballRightPosition = ballLeftPosition + ballWidth
+        const ballRightPosition = ballLeftPosition + ballWidth;
         const ballTopPosition = ballPosition.top;
         const ballBottomPosition = ballPosition.bottom;
         const barWidth = this.text.current.getBoundingClientRect().width;
@@ -52,11 +64,11 @@ class App extends React.Component<Props, any> {
           barPositon: {
             left: barLeftPosition,
             right: barRightPosition
-          }, 
+          },
           ballPosition: {
-            top: ballTopPosition, 
-            left: ballLeftPosition, 
-            right: ballRightPosition, 
+            top: ballTopPosition,
+            left: ballLeftPosition,
+            right: ballRightPosition,
             bottom: ballBottomPosition
           }
         });
@@ -71,28 +83,60 @@ class App extends React.Component<Props, any> {
     const ballRight = ballPosition.right;
     return (
       <GameCanvas>
-      <BlockWrapper>
-    {[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1].map(a => <Block />)}
-      </BlockWrapper>
+        <BlockWrapper>
+          {[
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ].map(a => (
+            <Block ballPosition={ballPosition} />
+          ))}
+        </BlockWrapper>
         <marquee
           behavior="alternate"
           scrollamount="30"
           height="400"
           direction="up"
-          style={
-            {position: 'absolute', 
-              top: 0}
-          }
+          style={{ position: "absolute", top: 0 }}
         >
           <marquee behavior="alternate" scrollamount="30">
-            <span ref={this.ball}>●</span>
+            <Ball ref={this.ball} ballPosition={ballPosition}>●</Ball>
           </marquee>
         </marquee>
-        <marquee behavior="alternate" scrollamount="30" style={
-            {position: 'absolute', 
-              top: 400}
-          }>
-          <span ref={this.text} >--------------------</span>
+        <marquee
+          behavior="alternate"
+          scrollamount="30"
+          style={{ position: "absolute", top: 400 }}
+        >
+          <span ref={this.text}>--------------------</span>
         </marquee>
         <p>ball</p>
         ball top: {ballTop} <br />
@@ -108,10 +152,15 @@ class App extends React.Component<Props, any> {
 const BlockWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-`
+`;
 
 const GameCanvas = styled.div`
   position: relative;
+`;
+
+const Ball = styled.div`
+display: inline-block;
+top: ${(props:any) => props.top}px;
 `
 
 export default App;

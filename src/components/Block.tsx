@@ -10,9 +10,21 @@ interface State {
   isCollapsed: boolean;
 }
 
-class Block extends React.Component<any, State> {
+interface Position {
+    top: number,
+    left: number,
+    bottom: number,
+    right: number,
+}
+
+interface Props {
+    ballPosition: Position
+}
+
+class Block extends React.Component<Props, State> {
   private block = React.createRef<HTMLParagraphElement>();
-  constructor(props) {
+
+  constructor(props:Props) {
     super(props);
     this.state = {
       id: null,
@@ -38,6 +50,18 @@ class Block extends React.Component<any, State> {
         bottom: blockBottomPosition
       });
     }
+  }
+
+  static getDerivedStateFromProps(nextProps:Props, prevState:State){
+      console.log('getDerivedStateFromProps nextProps: ', nextProps)
+      const {left, right, top} = nextProps.ballPosition; 
+      if(left && right && top){
+        if(top <= prevState.bottom && right >= prevState.left && left <= prevState.right){
+            console.log('top': top)
+            console.log('right': right)
+            return {isCollapsed : true}
+        }
+      }
   }
 
   render() {
