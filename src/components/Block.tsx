@@ -53,12 +53,12 @@ class Block extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(nextProps:Props, prevState:State){
-      console.log('getDerivedStateFromProps nextProps: ', nextProps)
-      const {left, right, top} = nextProps.ballPosition; 
-      if(left && right && top){
+      const {onCollide} = nextProps;
+      const {left, right, top, bottom} = nextProps.ballPosition; 
+      if(left && right && top && !prevState.isCollapsed){
         if(top <= prevState.bottom && right >= prevState.left && left <= prevState.right){
-            console.log('top': top)
-            console.log('right': right)
+            console.log(bottom)
+            onCollide(bottom);
             return {isCollapsed : true}
         }
       }

@@ -4,11 +4,14 @@
   "main": "index.js",
   "repository": "https://github.com/sadnessOjisan/MarqueeBreakout.git",
   "author": "sadness_ojisan <sadness.ojisan@gmail.com>",
-  "license": "MIT", 
+  "license": "MIT",
   "dependencies": {
+    "@types/lodash": "^4.14.118",
+    "@types/lodash.throttle": "^4.1.4",
     "@types/react": "^16.7.6",
     "@types/react-dom": "^16.0.9",
     "@types/styled-components": "^4.1.0",
+    "lodash.throttle": "^4.1.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "styled-components": "^4.1.1"

@@ -1,6 +1,25 @@
 import * as React from "react";
 import Block from "../components/Block";
 import styled from "styled-components";
+import {throttle} from 'lodash'
+import { createGlobalStyle } from "styled-components";
+
+const GlobalStyle = createGlobalStyle`
+  *,
+*:after,
+*:before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+    width: 100%;
+    height: 100%;
+}
+`;
+
 
 declare global {
   namespace JSX {
@@ -21,7 +40,10 @@ interface Position {
 
 interface State {
   barPositon: Position, 
-  ballPosition: Position
+  ballPosition: Position, 
+  vBallDirection: string, 
+  hBallDirection: string, 
+  bounceBorder: number | null
 }
 
 class App extends React.Component<Props, State> {
@@ -43,8 +65,21 @@ class App extends React.Component<Props, State> {
         left: null,
         right: null,
         bottom: null
-      }
+      }, 
+      vBallDirection: 'up', 
+      hBallDirection: 'right', 
+      bounceBorder: 34
     };
+  }
+
+  _bounceBall = throttle(this.bounceBall, 1000)
+
+  bounceBall(blockBottom){
+    console.log('_bounceBall fire')
+    console.log(blockBottom)
+    this.setState({
+      bounceBorder: 0
+    })
   }
 
   componentDidMount() {
@@ -52,6 +87,8 @@ class App extends React.Component<Props, State> {
       if (this.text.current && this.ball.current) {
         const barPosition = this.text.current.getBoundingClientRect();
         const barLeftPosition = barPosition.left;
+        const barTopPosition = barPosition.top;
+        const barBottomPosition = barPosition.bottom;
         const ballPosition = this.ball.current.getBoundingClientRect();
         const ballLeftPosition = ballPosition.left;
         const ballWidth = ballPosition.width;
@@ -63,7 +100,9 @@ class App extends React.Component<Props, State> {
         this.setState({
           barPositon: {
             left: barLeftPosition,
-            right: barRightPosition
+            right: barRightPosition, 
+            top: barTopPosition, 
+            bottom: barBottomPosition
           },
           ballPosition: {
             top: ballTopPosition,
@@ -73,16 +112,17 @@ class App extends React.Component<Props, State> {
           }
         });
       }
-    }, 100);
+    }, 1);
   }
 
   render() {
-    const { barPositon, ballPosition } = this.state;
+    const { barPositon, ballPosition, vBallDirection, hBallDirection, bounceBorder } = this.state;
     const { left, right } = barPositon;
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
       <GameCanvas>
+        <GlobalStyle />
         <BlockWrapper>
           {[
             1,
@@ -115,19 +155,47 @@ class App extends React.Component<Props, State> {
             1,
             1,
             1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
             1
-          ].map(a => (
-            <Block ballPosition={ballPosition} />
+          ].map(_ => (
+            <Block ballPosition={ballPosition} onCollide={(bottom)=>this._bounceBall(bottom)} />
           ))}
         </BlockWrapper>
         <marquee
           behavior="alternate"
-          scrollamount="30"
-          height="400"
-          direction="up"
-          style={{ position: "absolute", top: 0 }}
+          scrollamount="40"
+          height={`${400-bounceBorder}`}
+          style={{ position: "absolute", top: `${bounceBorder}px` }}
+          direction={vBallDirection}
         >
-          <marquee behavior="alternate" scrollamount="30">
+          <marquee behavior="alternate" scrollamount="30" direction={hBallDirection}>
             <Ball ref={this.ball} ballPosition={ballPosition}>●</Ball>
           </marquee>
         </marquee>
@@ -156,11 +224,11 @@ const BlockWrapper = styled.div`
 
 const GameCanvas = styled.div`
   position: relative;
+  height: 100vh;
 `;
 
 const Ball = styled.div`
 display: inline-block;
-top: ${(props:any) => props.top}px;
 `
 
 export default App;
