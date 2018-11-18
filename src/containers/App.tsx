@@ -78,7 +78,7 @@ class App extends React.Component<Props, State> {
     console.log('_bounceBall fire')
     console.log(blockBottom)
     this.setState({
-      bounceBorder: 0
+      bounceBorder: 0 // 跳ね返り計算は諦めた
     })
   }
 
