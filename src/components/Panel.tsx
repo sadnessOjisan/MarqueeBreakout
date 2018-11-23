@@ -26,10 +26,13 @@ const Panel = (props: Props) => {
             onSelect({ type: "BALL_Y_SPEED", value: e.target.value })
           }
         />
-        <label>aaa</label>
-        <select>
-          <option>aaa</option>
-          <option>aaa</option>
+        <label>behavior</label>
+        <select onChange={e =>
+            onSelect({ type: "BALL_X_BEHAVIOR", value: e.target.value })
+          }>
+          <option value='alternate'>alternate</option>
+          <option value='scroll'>scroll</option>
+          <option value='slide'>slide</option>
         </select>
       </form>
     </Wrapper>

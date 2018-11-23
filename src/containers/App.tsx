@@ -47,6 +47,7 @@ interface State {
   barSpeed: number;
   ballXSpeed: number;
   ballYSpeed: number;
+  ballXBehavior: string;
 }
 
 interface EventObject {
@@ -71,6 +72,7 @@ class App extends React.Component<Props, State> {
       barSpeed: 30,
       ballXSpeed: 30,
       ballYSpeed: 30,
+      ballXBehavior: 'alternate',
       ballPosition: {
         top: null,
         left: null,
@@ -109,6 +111,10 @@ class App extends React.Component<Props, State> {
         this.setState({
           ballYSpeed: value
         });
+      case 'BALL_X_BEHAVIOR': 
+        this.setState({
+          ballXBehavior: value
+        })
       default:
         break;
     }
@@ -156,7 +162,8 @@ class App extends React.Component<Props, State> {
       bounceBorder,
       barSpeed,
       ballXSpeed,
-      ballYSpeed
+      ballYSpeed, 
+      ballXBehavior
     } = this.state;
     const { left, right } = barPositon;
     const ballTop = ballPosition.top;
@@ -240,7 +247,7 @@ class App extends React.Component<Props, State> {
           direction={vBallDirection}
         >
           <marquee
-            behavior="alternate"
+            behavior={`${ballXBehavior}`}
             scrollamount={`${ballXSpeed}`}
             direction={hBallDirection}
           >
