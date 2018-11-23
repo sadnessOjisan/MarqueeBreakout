@@ -45,7 +45,9 @@ interface State {
   vBallDirection: string, 
   hBallDirection: string, 
   bounceBorder: number | null, 
-  barSpeed: number | string
+  barSpeed: number,
+  ballXSpeed: number, 
+  ballYSpeed: number
 }
 
 interface EventObject {
@@ -68,6 +70,8 @@ class App extends React.Component<Props, State> {
         bottom: null
       },
       barSpeed: 30,
+      ballXSpeed: 30,
+      ballYSpeed: 30,
       ballPosition: {
         top: null,
         left: null,
@@ -98,7 +102,16 @@ class App extends React.Component<Props, State> {
         this.setState({
           barSpeed: value
         })
-      
+      case 'BALL_X_SPEED': 
+      this.setState({
+        ballXSpeed: value
+      })
+      case 'BALL_Y_SPEED': 
+      this.setState({
+        ballYSpeed: value
+      })
+      default: 
+        break
     }
   }
 
@@ -136,7 +149,7 @@ class App extends React.Component<Props, State> {
   }
 
   render() {
-    const { barPositon, ballPosition, vBallDirection, hBallDirection, bounceBorder, barSpeed } = this.state;
+    const { barPositon, ballPosition, vBallDirection, hBallDirection, bounceBorder, barSpeed, ballXSpeed, ballYSpeed } = this.state;
     const { left, right } = barPositon;
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
@@ -210,12 +223,12 @@ class App extends React.Component<Props, State> {
         </BlockWrapper>
         <marquee
           behavior="alternate"
-          scrollamount="40"
+          scrollamount={`${ballYSpeed}`}
           height={`${400-bounceBorder}`}
           style={{ position: "absolute", top: `${bounceBorder}px` }}
           direction={vBallDirection}
         >
-          <marquee behavior="alternate" scrollamount="30" direction={hBallDirection}>
+          <marquee behavior="alternate" scrollamount={`${ballXSpeed}`} direction={hBallDirection}>
             <Ball ref={this.ball} ballPosition={ballPosition}>●</Ball>
           </marquee>
         </marquee>

@@ -1,6 +1,5 @@
 import * as React from "react";
 import styled from "styled-components";
-import { render } from "react-dom";
 
 interface Props {
     onSelect: any => void
@@ -13,6 +12,10 @@ const Panel = (props:Props) => {
         <form>
         <label>bar scroll speed</label>
         <input onChange={(e)=>onSelect({type: 'BAR_SPEED', value: e.target.value})}></input>
+        <label>ball x scroll speed</label>
+        <input onChange={(e)=>onSelect({type: 'BALL_X_SPEED', value: e.target.value})}></input>
+        <label>ball y scroll speed</label>
+        <input onChange={(e)=>onSelect({type: 'BALL_Y_SPEED', value: e.target.value})}></input>
             <label>aaa</label>
             <select>
                 <option>aaa</option>
@@ -22,10 +25,9 @@ const Panel = (props:Props) => {
 }
 
 const Wrapper = styled.div`
-  width: 40%;
+  width: 100%;
   position: absolute; 
   bottom: 0;
 `
-
 
 export default Panel;
