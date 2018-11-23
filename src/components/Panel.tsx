@@ -39,7 +39,6 @@ const Panel = (props: Props) => {
             onSelect({ type: "BALL_Y_BEHAVIOR", value: e.target.value })
           }>
           <option value='alternate'>alternate</option>
-          <option value='scroll'>scroll</option>
           <option value='slide'>slide</option>
         </select>
         <label>bar behavior</label>
@@ -50,6 +49,12 @@ const Panel = (props: Props) => {
           <option value='scroll'>scroll</option>
           <option value='slide'>slide</option>
         </select>
+        <label>width</label>
+        <input
+          onChange={e =>
+            onSelect({ type: "WIDTH", value: e.target.value })
+          }
+        />
       </form>
     </Wrapper>
   );
