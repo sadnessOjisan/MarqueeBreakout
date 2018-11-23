@@ -3,6 +3,7 @@ import Block from "../components/Block";
 import styled from "styled-components";
 import {throttle} from 'lodash'
 import { createGlobalStyle } from "styled-components";
+import Panel from '../components/Panel'
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -43,7 +44,13 @@ interface State {
   ballPosition: Position, 
   vBallDirection: string, 
   hBallDirection: string, 
-  bounceBorder: number | null
+  bounceBorder: number | null, 
+  barSpeed: number | string
+}
+
+interface EventObject {
+  type: string, 
+  value: string
 }
 
 class App extends React.Component<Props, State> {
@@ -60,6 +67,7 @@ class App extends React.Component<Props, State> {
         right: null,
         bottom: null
       },
+      barSpeed: 30,
       ballPosition: {
         top: null,
         left: null,
@@ -80,6 +88,18 @@ class App extends React.Component<Props, State> {
     this.setState({
       bounceBorder: 0 // 跳ね返り計算は諦めた
     })
+  }
+
+  setMarqueeProperty(message:EventObject){
+    const type = message.type;
+    const value = message.value
+    switch(type){
+      case 'BAR_SPEED': 
+        this.setState({
+          barSpeed: value
+        })
+      
+    }
   }
 
   componentDidMount() {
@@ -116,7 +136,7 @@ class App extends React.Component<Props, State> {
   }
 
   render() {
-    const { barPositon, ballPosition, vBallDirection, hBallDirection, bounceBorder } = this.state;
+    const { barPositon, ballPosition, vBallDirection, hBallDirection, bounceBorder, barSpeed } = this.state;
     const { left, right } = barPositon;
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
@@ -201,7 +221,7 @@ class App extends React.Component<Props, State> {
         </marquee>
         <marquee
           behavior="alternate"
-          scrollamount="30"
+          scrollamount={`${barSpeed}`}
           style={{ position: "absolute", top: 400 }}
         >
           <span ref={this.text}>--------------------</span>
@@ -212,6 +232,7 @@ class App extends React.Component<Props, State> {
         <p>bar</p>
         left: {left} <br />
         right: {right}
+        <Panel onSelect={(obj:EventObject)=>this.setMarqueeProperty(obj)}></Panel>
       </GameCanvas>
     );
   }
