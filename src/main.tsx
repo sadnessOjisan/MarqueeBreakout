@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import App from './containers/App';
+import App from "./containers/App";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -20,6 +20,8 @@ html {
 `;
 
 ReactDOM.render(
-    <App><GlobalStyle /></App>,
-    document.getElementById("root")
+  <App>
+    <GlobalStyle />
+  </App>,
+  document.getElementById("root")
 );

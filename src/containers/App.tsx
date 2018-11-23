@@ -1,9 +1,9 @@
 import * as React from "react";
 import Block from "../components/Block";
 import styled from "styled-components";
-import {throttle} from 'lodash'
+import { throttle } from "lodash";
 import { createGlobalStyle } from "styled-components";
-import Panel from '../components/Panel'
+import Panel from "../components/Panel";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -21,7 +21,6 @@ html {
 }
 `;
 
-
 declare global {
   namespace JSX {
     interface IntrinsicElements {
@@ -33,26 +32,26 @@ declare global {
 interface Props {}
 
 interface Position {
-  top: number| null,
-  left: number| null,
-  bottom: number| null,
-  right: number| null,
+  top: number | null;
+  left: number | null;
+  bottom: number | null;
+  right: number | null;
 }
 
 interface State {
-  barPositon: Position, 
-  ballPosition: Position, 
-  vBallDirection: string, 
-  hBallDirection: string, 
-  bounceBorder: number | null, 
-  barSpeed: number,
-  ballXSpeed: number, 
-  ballYSpeed: number
+  barPositon: Position;
+  ballPosition: Position;
+  vBallDirection: string;
+  hBallDirection: string;
+  bounceBorder: number | null;
+  barSpeed: number;
+  ballXSpeed: number;
+  ballYSpeed: number;
 }
 
 interface EventObject {
-  type: string, 
-  value: string
+  type: string;
+  value: string;
 }
 
 class App extends React.Component<Props, State> {
@@ -77,41 +76,41 @@ class App extends React.Component<Props, State> {
         left: null,
         right: null,
         bottom: null
-      }, 
-      vBallDirection: 'up', 
-      hBallDirection: 'right', 
+      },
+      vBallDirection: "up",
+      hBallDirection: "right",
       bounceBorder: 34
     };
   }
 
-  _bounceBall = throttle(this.bounceBall, 1000)
+  _bounceBall = throttle(this.bounceBall, 1000);
 
-  bounceBall(blockBottom){
-    console.log('_bounceBall fire')
-    console.log(blockBottom)
+  bounceBall(blockBottom) {
+    console.log("_bounceBall fire");
+    console.log(blockBottom);
     this.setState({
       bounceBorder: 0 // 跳ね返り計算は諦めた
-    })
+    });
   }
 
-  setMarqueeProperty(message:EventObject){
+  setMarqueeProperty(message: EventObject) {
     const type = message.type;
-    const value = message.value
-    switch(type){
-      case 'BAR_SPEED': 
+    const value = message.value;
+    switch (type) {
+      case "BAR_SPEED":
         this.setState({
           barSpeed: value
-        })
-      case 'BALL_X_SPEED': 
-      this.setState({
-        ballXSpeed: value
-      })
-      case 'BALL_Y_SPEED': 
-      this.setState({
-        ballYSpeed: value
-      })
-      default: 
-        break
+        });
+      case "BALL_X_SPEED":
+        this.setState({
+          ballXSpeed: value
+        });
+      case "BALL_Y_SPEED":
+        this.setState({
+          ballYSpeed: value
+        });
+      default:
+        break;
     }
   }
 
@@ -133,8 +132,8 @@ class App extends React.Component<Props, State> {
         this.setState({
           barPositon: {
             left: barLeftPosition,
-            right: barRightPosition, 
-            top: barTopPosition, 
+            right: barRightPosition,
+            top: barTopPosition,
             bottom: barBottomPosition
           },
           ballPosition: {
@@ -149,7 +148,16 @@ class App extends React.Component<Props, State> {
   }
 
   render() {
-    const { barPositon, ballPosition, vBallDirection, hBallDirection, bounceBorder, barSpeed, ballXSpeed, ballYSpeed } = this.state;
+    const {
+      barPositon,
+      ballPosition,
+      vBallDirection,
+      hBallDirection,
+      bounceBorder,
+      barSpeed,
+      ballXSpeed,
+      ballYSpeed
+    } = this.state;
     const { left, right } = barPositon;
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
@@ -218,18 +226,27 @@ class App extends React.Component<Props, State> {
             1,
             1
           ].map(_ => (
-            <Block ballPosition={ballPosition} onCollide={(bottom)=>this._bounceBall(bottom)} />
+            <Block
+              ballPosition={ballPosition}
+              onCollide={bottom => this._bounceBall(bottom)}
+            />
           ))}
         </BlockWrapper>
         <marquee
           behavior="alternate"
           scrollamount={`${ballYSpeed}`}
-          height={`${400-bounceBorder}`}
+          height={`${400 - bounceBorder}`}
           style={{ position: "absolute", top: `${bounceBorder}px` }}
           direction={vBallDirection}
         >
-          <marquee behavior="alternate" scrollamount={`${ballXSpeed}`} direction={hBallDirection}>
-            <Ball ref={this.ball} ballPosition={ballPosition}>●</Ball>
+          <marquee
+            behavior="alternate"
+            scrollamount={`${ballXSpeed}`}
+            direction={hBallDirection}
+          >
+            <Ball ref={this.ball} ballPosition={ballPosition}>
+              ●
+            </Ball>
           </marquee>
         </marquee>
         <marquee
@@ -245,7 +262,7 @@ class App extends React.Component<Props, State> {
         <p>bar</p>
         left: {left} <br />
         right: {right}
-        <Panel onSelect={(obj:EventObject)=>this.setMarqueeProperty(obj)}></Panel>
+        <Panel onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)} />
       </GameCanvas>
     );
   }
@@ -262,7 +279,7 @@ const GameCanvas = styled.div`
 `;
 
 const Ball = styled.div`
-display: inline-block;
-`
+  display: inline-block;
+`;
 
 export default App;

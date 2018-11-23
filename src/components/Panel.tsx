@@ -2,32 +2,44 @@ import * as React from "react";
 import styled from "styled-components";
 
 interface Props {
-    onSelect: any => void
+  (obj: any): void;
 }
 
-const Panel = (props:Props) => {
-    const {onSelect} = props;
-    return (<Wrapper>
-
-        <form>
+const Panel = (props: Props) => {
+  const { onSelect } = props;
+  return (
+    <Wrapper>
+      <form>
         <label>bar scroll speed</label>
-        <input onChange={(e)=>onSelect({type: 'BAR_SPEED', value: e.target.value})}></input>
+        <input
+          onChange={e => onSelect({ type: "BAR_SPEED", value: e.target.value })}
+        />
         <label>ball x scroll speed</label>
-        <input onChange={(e)=>onSelect({type: 'BALL_X_SPEED', value: e.target.value})}></input>
+        <input
+          onChange={e =>
+            onSelect({ type: "BALL_X_SPEED", value: e.target.value })
+          }
+        />
         <label>ball y scroll speed</label>
-        <input onChange={(e)=>onSelect({type: 'BALL_Y_SPEED', value: e.target.value})}></input>
-            <label>aaa</label>
-            <select>
-                <option>aaa</option>
-                <option>aaa</option>
-            </select></form>
-        </Wrapper>)
-}
+        <input
+          onChange={e =>
+            onSelect({ type: "BALL_Y_SPEED", value: e.target.value })
+          }
+        />
+        <label>aaa</label>
+        <select>
+          <option>aaa</option>
+          <option>aaa</option>
+        </select>
+      </form>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   width: 100%;
-  position: absolute; 
+  position: absolute;
   bottom: 0;
-`
+`;
 
 export default Panel;

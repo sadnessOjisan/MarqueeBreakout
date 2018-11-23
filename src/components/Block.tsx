@@ -11,20 +11,20 @@ interface State {
 }
 
 interface Position {
-    top: number,
-    left: number,
-    bottom: number,
-    right: number,
+  top: number;
+  left: number;
+  bottom: number;
+  right: number;
 }
 
 interface Props {
-    ballPosition: Position
+  ballPosition: Position;
 }
 
 class Block extends React.Component<Props, State> {
   private block = React.createRef<HTMLParagraphElement>();
 
-  constructor(props:Props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       id: null,
@@ -52,28 +52,34 @@ class Block extends React.Component<Props, State> {
     }
   }
 
-  static getDerivedStateFromProps(nextProps:Props, prevState:State){
-      const {onCollide} = nextProps;
-      const {left, right, top, bottom} = nextProps.ballPosition; 
-      if(left && right && top && !prevState.isCollapsed){
-        if(top <= prevState.bottom && right >= prevState.left && left <= prevState.right){
-            console.log(bottom)
-            onCollide(bottom);
-            return {isCollapsed : true}
-        }
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    const { onCollide } = nextProps;
+    const { left, right, top, bottom } = nextProps.ballPosition;
+    if (left && right && top && !prevState.isCollapsed) {
+      if (
+        top <= prevState.bottom &&
+        right >= prevState.left &&
+        left <= prevState.right
+      ) {
+        console.log(bottom);
+        onCollide(bottom);
+        return { isCollapsed: true };
       }
+    }
   }
 
   render() {
     const { isCollapsed, top, left } = this.state;
-    return <BlockOutline isCollapsed={isCollapsed} ref={this.block}>
-    top: {top} <br /> left: {left}
-    </BlockOutline>;
+    return (
+      <BlockOutline isCollapsed={isCollapsed} ref={this.block}>
+        top: {top} <br /> left: {left}
+      </BlockOutline>
+    );
   }
 }
 
 const BlockOutline = styled.div`
-  background-color: ${(props:any) => props.isCollapsed ? "red" : "blue"};
+  background-color: ${(props: any) => (props.isCollapsed ? "red" : "blue")};
   width: 50px;
   height: 50px;
   font-size: 6px;
