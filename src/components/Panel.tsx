@@ -42,6 +42,14 @@ const Panel = (props: Props) => {
           <option value='scroll'>scroll</option>
           <option value='slide'>slide</option>
         </select>
+        <label>bar behavior</label>
+        <select onChange={e =>
+            onSelect({ type: "BAR_BEHAVIOR", value: e.target.value })
+          }>
+          <option value='alternate'>alternate</option>
+          <option value='scroll'>scroll</option>
+          <option value='slide'>slide</option>
+        </select>
       </form>
     </Wrapper>
   );
