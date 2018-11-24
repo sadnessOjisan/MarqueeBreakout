@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { throttle } from "lodash";
 import { createGlobalStyle } from "styled-components";
 import Panel from "../components/Panel";
+import UserScore from "../components/UserScore"
+import zIndex from '../constants/zIndex';
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -53,6 +55,7 @@ interface State {
   width: number;
   height: number;
   isStart: boolean;
+  score: number;
 }
 
 interface EventObject {
@@ -91,12 +94,13 @@ class App extends React.Component<Props, State> {
       vBallDirection: "up",
       hBallDirection: "right",
       bounceBorder: 34, 
-      isStart: false
+      isStart: false, 
+      score: 0
     };
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    const { barPositon, ballPosition, isStart } = prevState;
+    const { barPositon, ballPosition, isStart, score } = prevState;
     const ballBottom = ballPosition.bottom;
     if (ballBottom > 392) {
       const barLeft = barPositon.left;
@@ -104,8 +108,9 @@ class App extends React.Component<Props, State> {
       const ballLeft = ballPosition.left; 
       const ballRight = ballPosition.right; 
       if(ballRight < barLeft || ballLeft > barRight){
-        if(isStart){
+        if(isStart && score !== 0){
           // alert('game over')
+          alert(`your score is ${score}. `)
         }
         return {isStart: true }
       }
@@ -113,11 +118,13 @@ class App extends React.Component<Props, State> {
     }
   }
 
-  _bounceBall = throttle(this.bounceBall, 1000);
+  handleClide = throttle(this.bounceBall, 100);
 
   bounceBall(blockBottom) {
+
     this.setState({
       bounceBorder: 0 // 跳ね返り計算は諦めた
+      score: this.state.score + 1
     });
   }
 
@@ -221,14 +228,14 @@ class App extends React.Component<Props, State> {
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
-      <div>
+      <Wrapper>
         {isStart? <GameCanvas>
         <GlobalStyle />
         <BlockWrapper>
           {(Array(1000).fill(0)).map(_ => (
             <Block
               ballPosition={ballPosition}
-              onCollide={bottom => this._bounceBall(bottom)}
+              onCollide={bottom => this.handleClide(bottom)}
             />
           ))}
         </BlockWrapper>
@@ -258,9 +265,10 @@ class App extends React.Component<Props, State> {
           <span ref={this.text}>--------------------</span>
         </marquee>
       </GameCanvas>
-      :'paramを設定してください'}
+      :<p>paramを設定してください</p>}
       <Panel onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)} onStart={()=>this.handleClickStartButton()}/>
-      </div>
+      <UserScore></UserScore>
+      </Wrapper>
     );
   }
 }
@@ -278,5 +286,9 @@ const GameCanvas = styled.div`
 const Ball = styled.div`
   display: inline-block;
 `;
+
+const Wrapper = styled.div`
+z-index: ${zIndex.app};
+`
 
 export default App;
