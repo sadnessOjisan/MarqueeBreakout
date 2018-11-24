@@ -3,6 +3,11 @@ import styled from "styled-components";
 import Re from '../assets/react.svg';
 import Vu from '../assets/vue.svg';
 import Ng from '../assets/angular.svg';
+import Gu from '../assets/gulp.svg';
+import Gr from '../assets/GraphQL.svg';
+import Br from '../assets/browserify.svg'
+
+
 interface State {
   id: number | null;
   top: number | null;
@@ -44,7 +49,7 @@ class Block extends React.Component<Props, State> {
   componentDidMount() {
     const{idx} = this.props;
     let img:string;
-    const amari = idx % 3;
+    const amari = idx % 6;
     switch(amari){
       case 0: 
         img = Re;
@@ -54,6 +59,15 @@ class Block extends React.Component<Props, State> {
         break;
       case 2: 
         img = Ng;
+        break;
+        case 3: 
+        img = Gu;
+        break;
+        case 4: 
+        img = Gr;
+        break;
+        case 5: 
+        img = Br;
         break;
       default: 
         img = Re

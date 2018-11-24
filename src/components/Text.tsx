@@ -7,11 +7,12 @@ interface Props {
     color?: string;
     children: React.ReactNode;
     align?: string;
+    onClick?: any
 }
 
 const Text = (props:Props) => {
-    const {children, className, color, size, align} = props;
-    return <StyledText className={className} size={size} color={color} align={align}>{children}</StyledText>
+    const {children, className, color, size, align, onClick} = props;
+    return <StyledText className={className} size={size} color={color} align={align} onClick={onClick}>{children}</StyledText>
 }
 
 const StyledText = styled.p`
