@@ -1,6 +1,8 @@
 import * as React from "react";
 import styled from "styled-components";
-
+import Re from '../assets/react.svg';
+import Vu from '../assets/vue.svg';
+import Ng from '../assets/angular.svg';
 interface State {
   id: number | null;
   top: number | null;
@@ -8,6 +10,7 @@ interface State {
   right: number | null;
   bottom: number | null;
   isCollapsed: boolean;
+  img: string | null
 }
 
 interface Position {
@@ -19,6 +22,7 @@ interface Position {
 
 interface Props {
   ballPosition: Position;
+  idx: number
 }
 
 class Block extends React.Component<Props, State> {
@@ -32,11 +36,30 @@ class Block extends React.Component<Props, State> {
       left: null,
       right: null,
       bottom: null,
-      isCollapsed: false
+      isCollapsed: false, 
+      img: null
     };
   }
 
   componentDidMount() {
+    const{idx} = this.props;
+    let img:string;
+    const amari = idx % 3;
+    switch(amari){
+      case 0: 
+        img = Re;
+        break;
+      case 1: 
+        img = Vu;
+        break;
+      case 2: 
+        img = Ng;
+        break;
+      default: 
+        img = Re
+        break;
+    }
+    
     if (this.block.current) {
       const blockPosition = this.block.current.getBoundingClientRect();
       const blockLeftPosition = blockPosition.left;
@@ -44,10 +67,12 @@ class Block extends React.Component<Props, State> {
       const blockBottomPosition = blockPosition.bottom;
       const blockRightPosition = blockPosition.right;
       this.setState({
+        id: idx,
         top: blockTopPosition,
         left: blockLeftPosition,
         right: blockRightPosition,
-        bottom: blockBottomPosition
+        bottom: blockBottomPosition, 
+        img: img
       });
     }
   }
@@ -71,17 +96,17 @@ class Block extends React.Component<Props, State> {
   }
 
   render() {
-    const { isCollapsed, top, left } = this.state;
+    const { isCollapsed, img } = this.state;
     return (
       <BlockOutline isCollapsed={isCollapsed} ref={this.block}>
-        a
+        <img src={img} />
       </BlockOutline>
     );
   }
 }
 
 const BlockOutline = styled.div`
-  background-color: ${(props: any) => (props.isCollapsed ? "red" : "blue")};
+  visibility: ${(props: any) => (props.isCollapsed ? "hidden" : "initial")};
   width: 20px;
   height: 20px;
 `;

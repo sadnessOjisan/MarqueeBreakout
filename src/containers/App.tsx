@@ -7,6 +7,7 @@ import Panel from "../components/Panel";
 import UserScore from "../components/UserScore";
 import zIndex from "../constants/zIndex";
 import Mode from "../constants/mode";
+import Text from '../components/Text';
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -66,6 +67,8 @@ interface EventObject {
   value: string;
 }
 
+const GAME_SCREEN_HEIGHT = 640;
+
 class App extends React.Component<Props, State> {
   private text = React.createRef<HTMLParagraphElement>();
   private ball = React.createRef<HTMLParagraphElement>();
@@ -115,8 +118,8 @@ class App extends React.Component<Props, State> {
       if (ballRight < barLeft || ballLeft > barRight) {
         if (isStart && score !== 0) {
           if(mode === Mode.normal){
-            alert(`your score is ${score}. `);
-            return { isStart: false };
+            alert('げーむおーばー');
+            return { isStart: false, score: 0 };
           }else{
             console.log('[無敵モード]あなたはいま死にました')
           }
@@ -210,9 +213,16 @@ class App extends React.Component<Props, State> {
     }, 1);
   }
 
-  handleClickStartButton() {
+  handleClickStartButton(mode:string) {
     this.setState({
-      isStart: true
+      isStart: true, 
+      mode: mode
+    });
+  }
+
+  handleGameQuit(){
+    this.setState({
+      isStart: false
     });
   }
 
@@ -244,35 +254,38 @@ class App extends React.Component<Props, State> {
       width,
       isStart, 
       isModalOpen, 
+      score
     } = this.state;
-    const { left, right } = barPositon;
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
       <Wrapper>
+        <GlobalStyle />
         {isStart ? (
           <GameCanvas>
-            <GlobalStyle />
+            <Score>your score is {score}. </Score>
             <BlockWrapper>
               {Array(1000)
                 .fill(0)
-                .map(_ => (
+                .map((_,idx) => (
                   <Block
                     ballPosition={ballPosition}
                     onCollide={bottom => this.handleClide(bottom)}
+                    idx={idx}
+                    key={idx}
                   />
                 ))}
             </BlockWrapper>
             <marquee
-              behavior={`${ballYBehavior}`}
-              scrollamount={`${ballYSpeed}`}
-              height={`${640}`}
+              behavior={ballYBehavior}
+              scrollamount={ballYSpeed}
+              height={GAME_SCREEN_HEIGHT}
               style={{ position: "absolute", top: `${bounceBorder}px` }}
               direction={vBallDirection}
             >
               <marquee
-                behavior={`${ballXBehavior}`}
-                scrollamount={`${ballXSpeed}`}
+                behavior={ballXBehavior}
+                scrollamount={ballXSpeed}
                 direction={hBallDirection}
                 width={`${width}%`}
               >
@@ -284,20 +297,22 @@ class App extends React.Component<Props, State> {
             <marquee
               behavior={`${barBehavior}`}
               scrollamount={`${barSpeed}`}
-              style={{ position: "absolute", top: 640 }}
+              style={{ position: "absolute", top: GAME_SCREEN_HEIGHT }}
             >
               <span ref={this.text}>--------------------</span>
             </marquee>
           </GameCanvas>
         ) : (
           <div>
-            <p>paramを設定してください</p>
-            <p onClick={()=>this.handleModalOpen()}>ランキングを確認する</p>
+            <Text align='center'>paramを設定してください</Text>
+            <br /><br /><br /><br /><br />
+            <Text onClick={()=>this.handleModalOpen()} align='center'>ランキングを確認する</Text>
             </div>
         )}
         <Panel
           onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)}
-          onStart={() => this.handleClickStartButton()}
+          onStart={(mode:string) => this.handleClickStartButton(mode)}
+          onQuit={()=>this.handleGameQuit()}
         />
         {isModalOpen && <UserScore onClose={()=>this.handleCloseModal()} />}
       </Wrapper>
@@ -322,5 +337,13 @@ const Ball = styled.div`
 const Wrapper = styled.div`
   z-index: ${zIndex.app};
 `;
+
+const Score = styled.p`
+  position: absolute; 
+  top: 50%; 
+  left: 40%;
+  text-align: center;
+  font-size: 36px;
+`
 
 export default App;

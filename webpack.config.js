@@ -16,7 +16,7 @@ module.exports = {
         use: 'awesome-typescript-loader'
     },
     {
-      test: /\.(jpg|png)$/,
+      test: /\.(jpg|png|svg)$/,
       loaders: 'url-loader'
     },
     { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }]

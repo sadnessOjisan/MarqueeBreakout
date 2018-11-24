@@ -1,12 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
+import Mode from '../constants/mode'
 
 interface Props {
   (obj: any): void;
 }
 
 const Panel = (props: Props) => {
-  const { onSelect, onStart } = props;
+  const { onSelect, onStart, onQuit } = props;
   return (
     <Wrapper>
       <label>bar scroll speed</label>
@@ -58,7 +59,9 @@ const Panel = (props: Props) => {
       <input
         onChange={e => onSelect({ type: "WIDTH", value: e.target.value })}
       />
-      <button onClick={onStart}>START</button>
+      <button onClick={()=>onStart(Mode.normal)}>START</button>
+      <button onClick={()=>onStart(Mode.practice)}>無敵モードで練習する</button>
+      <button onClick={()=>onQuit()}>ゲームをやめる</button>
     </Wrapper>
   );
 };
