@@ -51,6 +51,8 @@ interface State {
   ballYBehavior: string;
   barBehavior: string;
   width: number;
+  height: number;
+  isStart: boolean;
 }
 
 interface EventObject {
@@ -75,10 +77,11 @@ class App extends React.Component<Props, State> {
       barSpeed: 30,
       ballXSpeed: 30,
       ballYSpeed: 30,
-      ballXBehavior: 'alternate',
-      ballYBehavior: 'alternate', 
-      barBehavior: 'alternate', 
+      ballXBehavior: "alternate",
+      ballYBehavior: "alternate",
+      barBehavior: "alternate",
       width: 100,
+      height: 100,
       ballPosition: {
         top: null,
         left: null,
@@ -87,8 +90,26 @@ class App extends React.Component<Props, State> {
       },
       vBallDirection: "up",
       hBallDirection: "right",
-      bounceBorder: 34
+      bounceBorder: 34, 
+      isStart: false;
     };
+  }
+
+  static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    const { barPositon, ballPosition, isStart } = prevState;
+    const ballBottom = ballPosition.bottom;
+    if (ballBottom > 392) {
+      const barLeft = barPositon.left;
+      const barRight = barPositon.right;
+      const ballLeft = ballPosition.left; 
+      const ballRight = ballPosition.right; 
+      if(ballRight < barLeft || ballLeft > barRight){
+        if(isStart){
+          alert('game over')
+        }return{isStart: true }
+        
+      }
+    }
   }
 
   _bounceBall = throttle(this.bounceBall, 1000);
@@ -117,22 +138,26 @@ class App extends React.Component<Props, State> {
         this.setState({
           ballYSpeed: value
         });
-      case 'BALL_X_BEHAVIOR': 
+      case "BALL_X_BEHAVIOR":
         this.setState({
           ballXBehavior: value
-        }); 
-        case 'BALL_Y_BEHAVIOR': 
+        });
+      case "BALL_Y_BEHAVIOR":
         this.setState({
           ballYBehavior: value
-        }); 
-        case 'BAR_BEHAVIOR': 
+        });
+      case "BAR_BEHAVIOR":
         this.setState({
           barBehavior: value
-        }); 
-        case 'WIDTH': 
+        });
+      case "WIDTH":
         this.setState({
           width: value
-        }); 
+        });
+      case "HEIGHT":
+        this.setState({
+          height: value
+        });
       default:
         break;
     }
@@ -171,6 +196,13 @@ class App extends React.Component<Props, State> {
     }, 1);
   }
 
+  handleClickStartButton(){
+    alert('hi')
+    setTimeout(()=>this.setState({
+      isStart: true
+    }),100)
+  }
+
   render() {
     const {
       barPositon,
@@ -180,80 +212,22 @@ class App extends React.Component<Props, State> {
       bounceBorder,
       barSpeed,
       ballXSpeed,
-      ballYSpeed, 
-      ballXBehavior, 
-      ballYBehavior, 
-      barBehavior, 
-      width
+      ballYSpeed,
+      ballXBehavior,
+      ballYBehavior,
+      barBehavior,
+      width,
+      isStart
     } = this.state;
     const { left, right } = barPositon;
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
-      <GameCanvas>
+      <div>
+        {true? <GameCanvas>
         <GlobalStyle />
         <BlockWrapper>
-          {[
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1
-          ].map(_ => (
+          {(Array(500).fill(0)).map(_ => (
             <Block
               ballPosition={ballPosition}
               onCollide={bottom => this._bounceBall(bottom)}
@@ -285,14 +259,10 @@ class App extends React.Component<Props, State> {
         >
           <span ref={this.text}>--------------------</span>
         </marquee>
-        <p>ball</p>
-        ball top: {ballTop} <br />
-        ball right: {ballRight}
-        <p>bar</p>
-        left: {left} <br />
-        right: {right}
-        <Panel onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)} />
       </GameCanvas>
+      :'paramを設定してください'}
+      <Panel onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)} onStart={()=>this.handleClickStartButton()}/>
+      </div>
     );
   }
 }

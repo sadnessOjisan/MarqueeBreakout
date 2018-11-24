@@ -53,13 +53,15 @@ class Block extends React.Component<Props, State> {
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+    const blockState = prevState
     const { onCollide } = nextProps;
     const { left, right, top, bottom } = nextProps.ballPosition;
-    if (left && right && top && !prevState.isCollapsed) {
+    if (left && right && top && !blockState.isCollapsed) {
       if (
-        top <= prevState.bottom &&
-        right >= prevState.left &&
-        left <= prevState.right
+        top <= blockState.bottom &&
+        right >= blockState.left &&
+        left <= blockState.right && 
+        bottom >= blockState.top
       ) {
         console.log(bottom);
         onCollide(bottom);
@@ -72,7 +74,7 @@ class Block extends React.Component<Props, State> {
     const { isCollapsed, top, left } = this.state;
     return (
       <BlockOutline isCollapsed={isCollapsed} ref={this.block}>
-        top: {top} <br /> left: {left}
+      a
       </BlockOutline>
     );
   }
@@ -80,9 +82,8 @@ class Block extends React.Component<Props, State> {
 
 const BlockOutline = styled.div`
   background-color: ${(props: any) => (props.isCollapsed ? "red" : "blue")};
-  width: 50px;
-  height: 50px;
-  font-size: 6px;
+  width: 20px;
+  height: 20px;
 `;
 
 export default Block;

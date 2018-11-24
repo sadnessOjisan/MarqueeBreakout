@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Panel = (props: Props) => {
-  const { onSelect } = props;
+  const { onSelect, onStart } = props;
   return (
     <Wrapper>
       <form>
@@ -55,6 +55,7 @@ const Panel = (props: Props) => {
             onSelect({ type: "WIDTH", value: e.target.value })
           }
         />
+        <button onClick={onStart}>START</button>
       </form>
     </Wrapper>
   );
