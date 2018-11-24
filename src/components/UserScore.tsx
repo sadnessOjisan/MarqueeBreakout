@@ -2,14 +2,22 @@ import * as React from "react";
 import styled from "styled-components";
 import zIndex from "../constants/zIndex";
 
-interface Props {}
+interface Props {
+    onClose():void
+}
 
 const UserScore = (props: Props) => {
+    const {onClose} = props;
   return (
     <ModalWrapper>
       <InnterContainer>
-        <ModalHeader>aaaaa</ModalHeader>
-        score
+        <ModalHeader>
+            <ModalTitle>スコア確認</ModalTitle>
+            <CloseLink onClick={onClose}>閉じる</CloseLink>
+        </ModalHeader>
+        <ContentsWrapper>
+
+        </ContentsWrapper>
       </InnterContainer>
     </ModalWrapper>
   );
@@ -33,10 +41,28 @@ const InnterContainer = styled.div`
   position: absolute;
   width: 80%;
   height: 80%;
+  border-radius: 8px;
 `;
 
 const ModalHeader = styled.div`
+position: relative;
   width: 100%;
 `;
+
+const ModalTitle = styled.h3`
+  text-align: center;
+`
+
+const CloseLink = styled.span`
+  position: absolute; 
+  right: 12px;
+  top: 0;
+  cursor: pointer;
+`
+
+const ContentsWrapper = styled.div`
+  height: 100%; 
+  overflow-y: scroll;
+`
 
 export default UserScore;

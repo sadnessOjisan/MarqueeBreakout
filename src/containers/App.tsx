@@ -6,6 +6,7 @@ import { createGlobalStyle } from "styled-components";
 import Panel from "../components/Panel";
 import UserScore from "../components/UserScore";
 import zIndex from "../constants/zIndex";
+import Mode from "../constants/mode";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -56,6 +57,8 @@ interface State {
   height: number;
   isStart: boolean;
   score: number;
+  isModalOpen: boolean; 
+  mode: string;
 }
 
 interface EventObject {
@@ -95,22 +98,28 @@ class App extends React.Component<Props, State> {
       hBallDirection: "right",
       bounceBorder: 34,
       isStart: false,
-      score: 0
+      score: 0, 
+      isModalOpen: false, 
+      mode: Mode.normal
     };
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
-    const { barPositon, ballPosition, isStart, score } = prevState;
+    const { barPositon, ballPosition, isStart, score, mode } = prevState;
     const ballBottom = ballPosition.bottom;
-    if (ballBottom > 392) {
+    if (ballBottom > 632) {
       const barLeft = barPositon.left;
       const barRight = barPositon.right;
       const ballLeft = ballPosition.left;
       const ballRight = ballPosition.right;
       if (ballRight < barLeft || ballLeft > barRight) {
         if (isStart && score !== 0) {
-          // alert('game over')
-          alert(`your score is ${score}. `);
+          if(mode === Mode.normal){
+            alert(`your score is ${score}. `);
+            return { isStart: false };
+          }else{
+            console.log('[無敵モード]あなたはいま死にました')
+          }
         }
         return { isStart: true };
       }
@@ -207,6 +216,18 @@ class App extends React.Component<Props, State> {
     });
   }
 
+  handleCloseModal(){
+    this.setState({
+      isModalOpen: false
+    });
+  }
+
+  handleModalOpen(){
+    this.setState({
+      isModalOpen: true
+    });
+  }
+
   render() {
     const {
       barPositon,
@@ -221,7 +242,8 @@ class App extends React.Component<Props, State> {
       ballYBehavior,
       barBehavior,
       width,
-      isStart
+      isStart, 
+      isModalOpen, 
     } = this.state;
     const { left, right } = barPositon;
     const ballTop = ballPosition.top;
@@ -244,7 +266,7 @@ class App extends React.Component<Props, State> {
             <marquee
               behavior={`${ballYBehavior}`}
               scrollamount={`${ballYSpeed}`}
-              height={`${400 - bounceBorder}`}
+              height={`${640}`}
               style={{ position: "absolute", top: `${bounceBorder}px` }}
               direction={vBallDirection}
             >
@@ -262,19 +284,22 @@ class App extends React.Component<Props, State> {
             <marquee
               behavior={`${barBehavior}`}
               scrollamount={`${barSpeed}`}
-              style={{ position: "absolute", top: 400 }}
+              style={{ position: "absolute", top: 640 }}
             >
               <span ref={this.text}>--------------------</span>
             </marquee>
           </GameCanvas>
         ) : (
-          <p>paramを設定してください</p>
+          <div>
+            <p>paramを設定してください</p>
+            <p onClick={()=>this.handleModalOpen()}>ランキングを確認する</p>
+            </div>
         )}
         <Panel
           onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)}
           onStart={() => this.handleClickStartButton()}
         />
-        <UserScore />
+        {isModalOpen && <UserScore onClose={()=>this.handleCloseModal()} />}
       </Wrapper>
     );
   }
