@@ -9,7 +9,6 @@ const Panel = (props: Props) => {
   const { onSelect, onStart } = props;
   return (
     <Wrapper>
-      <form>
         <label>bar scroll speed</label>
         <input
           onChange={e => onSelect({ type: "BAR_SPEED", value: e.target.value })}
@@ -56,7 +55,6 @@ const Panel = (props: Props) => {
           }
         />
         <button onClick={onStart}>START</button>
-      </form>
     </Wrapper>
   );
 };

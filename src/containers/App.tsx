@@ -91,7 +91,7 @@ class App extends React.Component<Props, State> {
       vBallDirection: "up",
       hBallDirection: "right",
       bounceBorder: 34, 
-      isStart: false;
+      isStart: false
     };
   }
 
@@ -105,18 +105,17 @@ class App extends React.Component<Props, State> {
       const ballRight = ballPosition.right; 
       if(ballRight < barLeft || ballLeft > barRight){
         if(isStart){
-          alert('game over')
-        }return{isStart: true }
-        
+          // alert('game over')
+        }
+        return {isStart: true }
       }
+      return null;
     }
   }
 
   _bounceBall = throttle(this.bounceBall, 1000);
 
   bounceBall(blockBottom) {
-    console.log("_bounceBall fire");
-    console.log(blockBottom);
     this.setState({
       bounceBorder: 0 // 跳ね返り計算は諦めた
     });
@@ -197,10 +196,9 @@ class App extends React.Component<Props, State> {
   }
 
   handleClickStartButton(){
-    alert('hi')
-    setTimeout(()=>this.setState({
+    this.setState({
       isStart: true
-    }),100)
+    })
   }
 
   render() {
@@ -224,10 +222,10 @@ class App extends React.Component<Props, State> {
     const ballRight = ballPosition.right;
     return (
       <div>
-        {true? <GameCanvas>
+        {isStart? <GameCanvas>
         <GlobalStyle />
         <BlockWrapper>
-          {(Array(500).fill(0)).map(_ => (
+          {(Array(1000).fill(0)).map(_ => (
             <Block
               ballPosition={ballPosition}
               onCollide={bottom => this._bounceBall(bottom)}
