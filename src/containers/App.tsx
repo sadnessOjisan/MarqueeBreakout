@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { throttle } from "lodash";
 import { createGlobalStyle } from "styled-components";
 import Panel from "../components/Panel";
-import UserScore from "../components/UserScore"
-import zIndex from '../constants/zIndex';
+import UserScore from "../components/UserScore";
+import zIndex from "../constants/zIndex";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -93,8 +93,8 @@ class App extends React.Component<Props, State> {
       },
       vBallDirection: "up",
       hBallDirection: "right",
-      bounceBorder: 34, 
-      isStart: false, 
+      bounceBorder: 34,
+      isStart: false,
       score: 0
     };
   }
@@ -105,14 +105,14 @@ class App extends React.Component<Props, State> {
     if (ballBottom > 392) {
       const barLeft = barPositon.left;
       const barRight = barPositon.right;
-      const ballLeft = ballPosition.left; 
-      const ballRight = ballPosition.right; 
-      if(ballRight < barLeft || ballLeft > barRight){
-        if(isStart && score !== 0){
+      const ballLeft = ballPosition.left;
+      const ballRight = ballPosition.right;
+      if (ballRight < barLeft || ballLeft > barRight) {
+        if (isStart && score !== 0) {
           // alert('game over')
-          alert(`your score is ${score}. `)
+          alert(`your score is ${score}. `);
         }
-        return {isStart: true }
+        return { isStart: true };
       }
       return null;
     }
@@ -121,9 +121,8 @@ class App extends React.Component<Props, State> {
   handleClide = throttle(this.bounceBall, 100);
 
   bounceBall(blockBottom) {
-
     this.setState({
-      bounceBorder: 0 // 跳ね返り計算は諦めた
+      bounceBorder: 0, // 跳ね返り計算は諦めた
       score: this.state.score + 1
     });
   }
@@ -202,10 +201,10 @@ class App extends React.Component<Props, State> {
     }, 1);
   }
 
-  handleClickStartButton(){
+  handleClickStartButton() {
     this.setState({
       isStart: true
-    })
+    });
   }
 
   render() {
@@ -229,45 +228,53 @@ class App extends React.Component<Props, State> {
     const ballRight = ballPosition.right;
     return (
       <Wrapper>
-        {isStart? <GameCanvas>
-        <GlobalStyle />
-        <BlockWrapper>
-          {(Array(1000).fill(0)).map(_ => (
-            <Block
-              ballPosition={ballPosition}
-              onCollide={bottom => this.handleClide(bottom)}
-            />
-          ))}
-        </BlockWrapper>
-        <marquee
-          behavior={`${ballYBehavior}`}
-          scrollamount={`${ballYSpeed}`}
-          height={`${400 - bounceBorder}`}
-          style={{ position: "absolute", top: `${bounceBorder}px` }}
-          direction={vBallDirection}
-        >
-          <marquee
-            behavior={`${ballXBehavior}`}
-            scrollamount={`${ballXSpeed}`}
-            direction={hBallDirection}
-            width={`${width}%`}
-          >
-            <Ball ref={this.ball} ballPosition={ballPosition}>
-              ●
-            </Ball>
-          </marquee>
-        </marquee>
-        <marquee
-          behavior={`${barBehavior}`}
-          scrollamount={`${barSpeed}`}
-          style={{ position: "absolute", top: 400 }}
-        >
-          <span ref={this.text}>--------------------</span>
-        </marquee>
-      </GameCanvas>
-      :<p>paramを設定してください</p>}
-      <Panel onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)} onStart={()=>this.handleClickStartButton()}/>
-      <UserScore></UserScore>
+        {isStart ? (
+          <GameCanvas>
+            <GlobalStyle />
+            <BlockWrapper>
+              {Array(1000)
+                .fill(0)
+                .map(_ => (
+                  <Block
+                    ballPosition={ballPosition}
+                    onCollide={bottom => this.handleClide(bottom)}
+                  />
+                ))}
+            </BlockWrapper>
+            <marquee
+              behavior={`${ballYBehavior}`}
+              scrollamount={`${ballYSpeed}`}
+              height={`${400 - bounceBorder}`}
+              style={{ position: "absolute", top: `${bounceBorder}px` }}
+              direction={vBallDirection}
+            >
+              <marquee
+                behavior={`${ballXBehavior}`}
+                scrollamount={`${ballXSpeed}`}
+                direction={hBallDirection}
+                width={`${width}%`}
+              >
+                <Ball ref={this.ball} ballPosition={ballPosition}>
+                  ●
+                </Ball>
+              </marquee>
+            </marquee>
+            <marquee
+              behavior={`${barBehavior}`}
+              scrollamount={`${barSpeed}`}
+              style={{ position: "absolute", top: 400 }}
+            >
+              <span ref={this.text}>--------------------</span>
+            </marquee>
+          </GameCanvas>
+        ) : (
+          <p>paramを設定してください</p>
+        )}
+        <Panel
+          onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)}
+          onStart={() => this.handleClickStartButton()}
+        />
+        <UserScore />
       </Wrapper>
     );
   }
@@ -288,7 +295,7 @@ const Ball = styled.div`
 `;
 
 const Wrapper = styled.div`
-z-index: ${zIndex.app};
-`
+  z-index: ${zIndex.app};
+`;
 
 export default App;
