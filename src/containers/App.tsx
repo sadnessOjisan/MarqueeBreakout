@@ -147,34 +147,42 @@ class App extends React.Component<Props, State> {
         this.setState({
           barSpeed: value
         });
+        break;
       case "BALL_X_SPEED":
         this.setState({
           ballXSpeed: value
         });
+        break;
       case "BALL_Y_SPEED":
         this.setState({
           ballYSpeed: value
         });
+        break;
       case "BALL_X_BEHAVIOR":
         this.setState({
           ballXBehavior: value
         });
+        break;
       case "BALL_Y_BEHAVIOR":
         this.setState({
           ballYBehavior: value
         });
+        break;
       case "BAR_BEHAVIOR":
         this.setState({
           barBehavior: value
         });
+        break;
       case "WIDTH":
         this.setState({
           width: value
         });
+        break;
       case "HEIGHT":
         this.setState({
           height: value
         });
+        break;
       default:
         break;
     }
@@ -289,14 +297,14 @@ class App extends React.Component<Props, State> {
                 direction={hBallDirection}
                 width={`${width}%`}
               >
-                <Ball ref={this.ball} ballPosition={ballPosition}>
+                <Ball ref={this.ball}>
                   ●
                 </Ball>
               </marquee>
             </marquee>
             <marquee
-              behavior={`${barBehavior}`}
-              scrollamount={`${barSpeed}`}
+              behavior={barBehavior}
+              scrollamount={barSpeed}
               style={{ position: "absolute", top: GAME_SCREEN_HEIGHT }}
             >
               <span ref={this.text}>--------------------</span>
