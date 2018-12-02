@@ -11,6 +11,8 @@
     "@types/react": "^16.7.6",
     "@types/react-dom": "^16.0.9",
     "@types/styled-components": "^4.1.0",
+    "auth0-js": "^9.8.2",
+    "jwt-decode": "^2.2.0",
     "lodash.throttle": "^4.1.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
