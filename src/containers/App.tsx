@@ -8,6 +8,9 @@ import UserScore from "../components/UserScore";
 import zIndex from "../constants/zIndex";
 import Mode from "../constants/mode";
 import Text from '../components/Text';
+import AuthAPI from "../services/AuthAPI";
+import {splitCurrentURL, setHeader} from '../util/helper'
+import TestAPI from '../services/TestAPI'
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -60,6 +63,8 @@ interface State {
   score: number;
   isModalOpen: boolean; 
   mode: string;
+  isLogin: boolean;
+  accessToken: string
 }
 
 interface EventObject {
@@ -103,7 +108,9 @@ class App extends React.Component<Props, State> {
       isStart: false,
       score: 0, 
       isModalOpen: false, 
-      mode: Mode.normal
+      mode: Mode.normal, 
+      isLogin: false, 
+      accessToken: ''
     };
   }
 
@@ -189,6 +196,19 @@ class App extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    const {isLogin} = this.state;
+    if(!isLogin){
+      const params = splitCurrentURL("#");
+      if(params){
+        const id = params.id_token;
+        this.setState({
+          accessToken: id, 
+          isLogin: true
+        })
+        setHeader(id)
+      }
+      TestAPI.test()
+    }
     setInterval(() => {
       if (this.text.current && this.ball.current) {
         const barPosition = this.text.current.getBoundingClientRect();
@@ -264,6 +284,7 @@ class App extends React.Component<Props, State> {
       isModalOpen, 
       score
     } = this.state;
+    console.log('this.state', this.state)
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
@@ -312,6 +333,7 @@ class App extends React.Component<Props, State> {
           </GameCanvas>
         ) : (
           <div>
+            <p onClick={()=>{AuthAPI.login()}>login</p>
             <Text align='center'>paramを設定してください</Text>
             <br /><br /><br /><br /><br />
             <Text onClick={()=>this.handleModalOpen()} align='center'>ランキングを確認する</Text>
