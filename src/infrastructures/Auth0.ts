@@ -7,7 +7,7 @@ export default class Auth {
     redirectUri: 'http://localhost:8089',
     audience: "https://marquee-breakout.appspot.com",
     responseType: "token id_token",
-    scope: "read"
+    scope: "read add"
   });
   signUp(){
     // this.auth.
