@@ -11,7 +11,6 @@ import Mode from "../constants/mode";
 import Text from "../components/Text";
 import AuthAPI from "../services/AuthAPI";
 import { splitCurrentURL, setHeader } from "../util/helper";
-import TestAPI from "../services/TestAPI";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -173,6 +172,7 @@ class App extends React.Component<Props, State> {
     this.setState({
       user: user
     });
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   setMarqueeProperty(message: EventObject) {
@@ -226,7 +226,8 @@ class App extends React.Component<Props, State> {
 
   componentDidMount() {
     const { isLogin } = this.state;
-    if (!isLogin) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!isLogin && !user) {
       const params = splitCurrentURL("#");
       if (params) {
         const id = params.id_token;
@@ -235,8 +236,12 @@ class App extends React.Component<Props, State> {
           isLogin: true
         });
         setHeader(id);
+        AuthAPI.getProfile(u => this.setUserInfo(u));
       }
-      TestAPI.test();
+    } else {
+      this.setState({
+        user: user
+      });
     }
     setInterval(() => {
       if (this.text.current && this.ball.current) {
@@ -316,6 +321,7 @@ class App extends React.Component<Props, State> {
       isModalOpen,
       score,
       mode,
+      user,
       accessToken
     } = this.state;
     console.log("this.state", this.state);
@@ -396,9 +402,13 @@ class App extends React.Component<Props, State> {
           onQuit={() => this.handleGameQuit()}
         />
         {isModalOpen && mode === Mode.ranking ? (
-          <Ranking onClose={() => this.handleCloseModal()} />
+          <Ranking onClose={() => this.handleCloseModal()} user={user} />
         ) : isModalOpen && mode === Mode.score ? (
-          <UserScore onClose={() => this.handleCloseModal()} />
+          <UserScore
+            onClose={() => this.handleCloseModal()}
+            user={user}
+            score={score}
+          />
         ) : (
           <React.Fragment />
         )}

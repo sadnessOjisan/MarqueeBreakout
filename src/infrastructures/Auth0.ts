@@ -47,6 +47,7 @@ class UserInfoAuth {
   });
   getProfile(stateHandler) {
     this.auth.parseHash({ hash: window.location.hash }, (err, authResult) => {
+      if(!authResult) return null;
       this.auth.client.userInfo(authResult.accessToken, (err, user) => {
         console.log("<this.auth.client.userInfo> user: ", user);
         stateHandler(user)
