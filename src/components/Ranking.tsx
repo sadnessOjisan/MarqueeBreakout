@@ -6,13 +6,13 @@ interface Props {
   onClose(): void;
 }
 
-const UserScore = (props: Props) => {
+const Ranking = (props: Props) => {
   const { onClose } = props;
   return (
     <ModalWrapper>
       <InnterContainer>
         <ModalHeader>
-          <ModalTitle>スコア確認</ModalTitle>
+          <ModalTitle>ランキング</ModalTitle>
           <CloseLink onClick={onClose}>閉じる</CloseLink>
         </ModalHeader>
         <ContentsWrapper />
@@ -63,4 +63,4 @@ const ContentsWrapper = styled.div`
   overflow-y: scroll;
 `;
 
-export default UserScore;
+export default Ranking;
