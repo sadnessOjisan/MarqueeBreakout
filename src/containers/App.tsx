@@ -428,10 +428,7 @@ class App extends React.Component<Props, State> {
           onQuit={() => this.handleGameQuit()}
         />
         {isModalOpen && mode === Mode.ranking ? (
-          <Ranking
-            onClose={() => this.handleCloseModal()}
-            user={user}
-          />
+          <Ranking onClose={() => this.handleCloseModal()} user={user} />
         ) : isModalOpen && mode === Mode.score ? (
           <UserScore
             onClose={() => this.handleCloseModal()}

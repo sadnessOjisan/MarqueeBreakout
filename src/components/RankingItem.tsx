@@ -1,24 +1,25 @@
 import * as React from "react";
 import styled from "styled-components";
-import User1 from '../assets/user1.png'
-import User2 from '../assets/user2.png'
-import User3 from '../assets/user3.png'
-import User4 from '../assets/user4.png'
+import User1 from "../assets/user1.png";
+import User2 from "../assets/user2.png";
+import User3 from "../assets/user3.png";
+import User4 from "../assets/user4.png";
+import color from "../constants/color";
 
 interface Props {
   isMe: boolean;
   score: number;
-  name:string;
+  name: string;
   rank: number;
 }
 
-const Images = [User1, User2, User3, User4]
+const Images = [User1, User2, User3, User4];
 
 const RankingItem = (props: Props) => {
   const { isMe, score, name, rank } = props;
   return (
     <Wrapper isMe={isMe}>
-    <RankWrapper>
+      <RankWrapper>
         <Text>{rank}</Text>
       </RankWrapper>
       <IconWrapper>
@@ -38,13 +39,13 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: ${props => props.isMe && "blue"};
+  background-color: ${props => props.isMe && color.blue};
 `;
 
 const RankWrapper = styled.div`
   width: 20%;
   text-align: center;
-`
+`;
 
 const IconWrapper = styled.div`
   width: 20%;
@@ -61,11 +62,11 @@ const NameWrapper = styled.div`
   text-align: center;
 `;
 
-const StyledImg = styled.img`
-`
+const StyledImg = styled.img``;
 
 const Text = styled.p`
   font-size: 32px;
-`
+  color: ${color.black};
+`;
 
 export default RankingItem;

@@ -3,9 +3,11 @@ import styled from "styled-components";
 import zIndex from "../constants/zIndex";
 import ScoreAPI from "../services/ScoreAPI";
 import Confetti from "react-confetti";
+import color from "../constants/color";
 
 interface Props {
   onClose(): void;
+  bestScore: number;
 }
 
 class UserScore extends React.Component {
@@ -56,7 +58,7 @@ class UserScore extends React.Component {
   }
 
   render() {
-    const { onClose, user, score } = this.props;
+    const { onClose, user, score, bestScore } = this.props;
     const { confettiSource } = this.state;
     return (
       <ModalWrapper>
@@ -66,18 +68,22 @@ class UserScore extends React.Component {
             <CloseLink onClick={onClose}>閉じる</CloseLink>
           </ModalHeader>
           <ContentsWrapper ref={this.contents}>
-            > current score {score}
-            name: {user.name}
+            <ResultTitle>ただいまのスコア</ResultTitle>
+            <ResultScore>{score}</ResultScore>
             <div
               style={{
                 position: "absolute",
-                top: 0,
+                top: 56,
                 left: 0,
                 width: "100%",
-                height: "100%"
+                height: "calc(100% - 56px)"
               }}
             >
-              <Confetti {...this.state} confettiSource={confettiSource} />
+              <Confetti
+                {...this.state}
+                confettiSource={confettiSource}
+                run={score > bestScore}
+              />
             </div>
           </ContentsWrapper>
         </InnterContainer>
@@ -97,10 +103,7 @@ const ModalWrapper = styled.div`
   justify-content: center;
   top: 0;
   left: 0;
-`;
-
-const StyledConf = styled(Confetti)`
-  height: 40%;
+  color: ${color.black};
 `;
 
 const InnterContainer = styled.div`
@@ -114,22 +117,43 @@ const InnterContainer = styled.div`
 const ModalHeader = styled.div`
   position: relative;
   width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0px;
 `;
 
 const ModalTitle = styled.h3`
   text-align: center;
+  font-size: 20px;
 `;
 
 const CloseLink = styled.span`
   position: absolute;
   right: 12px;
-  top: 0;
   cursor: pointer;
+  font-size: 20px;
+  color: ${color.blue};
 `;
 
 const ContentsWrapper = styled.div`
-  height: 100%;
+  height: calc(100% - 56px);
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ResultTitle = styled.p`
+  font-size: 20px;
+  text-align: center;
+`;
+const ResultScore = styled.p`
+  font-size: 200px;
+  text-align: center;
+  color: ${color.red};
 `;
 
 export default UserScore;

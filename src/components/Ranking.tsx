@@ -4,6 +4,7 @@ import zIndex from "../constants/zIndex";
 import { Score } from "../typedef/Score";
 import ScoreAPI from "../services/ScoreAPI";
 import Item from "./RankingItem";
+import color from "../constants/color";
 
 interface Props {
   onClose(): void;
@@ -46,7 +47,7 @@ class Ranking extends React.Component<Props, State> {
             <CloseLink onClick={onClose}>閉じる</CloseLink>
           </ModalHeader>
           <ContentsWrapper>
-            {scores.map((item,idx)=> (
+            {scores.map((item, idx) => (
               <Item
                 score={item.score}
                 isMe={item.uid === uid}
@@ -72,6 +73,7 @@ const ModalWrapper = styled.div`
   justify-content: center;
   top: 0;
   left: 0;
+  color: ${color.black};
 `;
 
 const InnterContainer = styled.div`
@@ -85,21 +87,29 @@ const InnterContainer = styled.div`
 const ModalHeader = styled.div`
   position: relative;
   width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0px;
 `;
 
 const ModalTitle = styled.h3`
   text-align: center;
+  font-size: 20px;
 `;
 
 const CloseLink = styled.span`
   position: absolute;
   right: 12px;
-  top: 0;
   cursor: pointer;
+  font-size: 20px;
+  color: ${color.blue};
 `;
 
 const ContentsWrapper = styled.div`
-  height: 100%;
+  overflow-y: scroll;
+  height: calc(100% - 56px);
   overflow-y: scroll;
 `;
 
