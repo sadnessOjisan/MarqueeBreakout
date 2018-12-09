@@ -10,7 +10,9 @@ import zIndex from "../constants/zIndex";
 import Mode from "../constants/mode";
 import Text from "../components/Text";
 import AuthAPI from "../services/AuthAPI";
+import userAPI from "../services/userAPI";
 import { splitCurrentURL, setHeader } from "../util/helper";
+import ScoreAPI from "../services/ScoreAPI";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -77,6 +79,7 @@ interface State {
   isLogin: boolean;
   accessToken: string;
   user: User;
+  bestScore: number;
 }
 
 interface EventObject {
@@ -122,7 +125,8 @@ class App extends React.Component<Props, State> {
       isModalOpen: false,
       mode: Mode.normal,
       isLogin: false,
-      accessToken: ""
+      accessToken: "",
+      bestScore: 0
     };
   }
 
@@ -169,9 +173,14 @@ class App extends React.Component<Props, State> {
   }
 
   setUserInfo(user) {
+    localStorage.removeItem("user"); // 初期化
     this.setState({
       user: user
     });
+    const uid = user.sub;
+    userAPI.registerUser(uid, user.name);
+    const highScore = ScoreAPI.getMyHighScore(uid);
+    console.log("highscore: ", highScore);
     localStorage.setItem("user", JSON.stringify(user));
   }
 
@@ -228,6 +237,7 @@ class App extends React.Component<Props, State> {
     const { isLogin } = this.state;
     const user = JSON.parse(localStorage.getItem("user"));
     if (!isLogin && !user) {
+      // 見ログインかつuser情報を持たない時
       const params = splitCurrentURL("#");
       if (params) {
         const id = params.id_token;
@@ -236,11 +246,23 @@ class App extends React.Component<Props, State> {
           isLogin: true
         });
         setHeader(id);
-        AuthAPI.getProfile(u => this.setUserInfo(u));
+        AuthAPI.getProfile(u => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
       }
     } else {
+      // user情報をすでに持っていた時
       this.setState({
         user: user
+      });
+      const uid = user.sub;
+      ScoreAPI.getMyHighScore(uid).then(res => {
+        console.log(res);
+        const { data } = res;
+        const { score } = data;
+        this.setState({
+          accessToken: id,
+          isLogin: true,
+          bestScore: score
+        });
       });
     }
     setInterval(() => {
@@ -297,9 +319,10 @@ class App extends React.Component<Props, State> {
     });
   }
 
-  handleModalOpen() {
+  handleModalOpen(mode: string) {
     this.setState({
-      isModalOpen: true
+      isModalOpen: true,
+      mode: mode
     });
   }
 
@@ -322,7 +345,7 @@ class App extends React.Component<Props, State> {
       score,
       mode,
       user,
-      accessToken
+      bestScore
     } = this.state;
     console.log("this.state", this.state);
     const ballTop = ballPosition.top;
@@ -391,7 +414,10 @@ class App extends React.Component<Props, State> {
             <br />
             <br />
             <br />
-            <Text onClick={() => this.handleModalOpen()} align="center">
+            <Text
+              onClick={() => this.handleModalOpen(Mode.ranking)}
+              align="center"
+            >
               ランキングを確認する
             </Text>
           </div>
@@ -402,12 +428,16 @@ class App extends React.Component<Props, State> {
           onQuit={() => this.handleGameQuit()}
         />
         {isModalOpen && mode === Mode.ranking ? (
-          <Ranking onClose={() => this.handleCloseModal()} user={user} />
+          <Ranking
+            onClose={() => this.handleCloseModal()}
+            user={user}
+          />
         ) : isModalOpen && mode === Mode.score ? (
           <UserScore
             onClose={() => this.handleCloseModal()}
             user={user}
             score={score}
+            bestScore={bestScore}
           />
         ) : (
           <React.Fragment />

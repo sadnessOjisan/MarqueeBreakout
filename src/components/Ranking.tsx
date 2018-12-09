@@ -1,26 +1,66 @@
 import * as React from "react";
 import styled from "styled-components";
 import zIndex from "../constants/zIndex";
+import { Score } from "../typedef/Score";
+import ScoreAPI from "../services/ScoreAPI";
+import Item from "./RankingItem";
 
 interface Props {
   onClose(): void;
+  user: any;
 }
 
-const Ranking = (props: Props) => {
-  const { onClose } = props;
-  return (
-    <ModalWrapper>
-      <InnterContainer>
-        <ModalHeader>
-          <ModalTitle>ランキング</ModalTitle>
-          <CloseLink onClick={onClose}>閉じる</CloseLink>
-        </ModalHeader>
-        <ContentsWrapper />
-      </InnterContainer>
-    </ModalWrapper>
-  );
-};
+interface State {
+  scores: Score[];
+  isLoading: boolean;
+}
 
+class Ranking extends React.Component<Props, State> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      scores: []
+    };
+  }
+
+  componentDidMount() {
+    ScoreAPI.getScores().then(res => {
+      console.log(res);
+      const { data } = res;
+      const { scores } = data;
+      this.setState({
+        scores: scores
+      });
+    });
+  }
+
+  render() {
+    const { onClose, user } = this.props;
+    const { scores } = this.state;
+    const uid = user && user.sub;
+    return (
+      <ModalWrapper>
+        <InnterContainer>
+          <ModalHeader>
+            <ModalTitle>ランキング</ModalTitle>
+            <CloseLink onClick={onClose}>閉じる</CloseLink>
+          </ModalHeader>
+          <ContentsWrapper>
+            {scores.map((item,idx)=> (
+              <Item
+                score={item.score}
+                isMe={item.uid === uid}
+                name={item.name}
+                rank={idx + 1}
+              />
+            ))}
+          </ContentsWrapper>
+          >
+        </InnterContainer>
+      </ModalWrapper>
+    );
+  }
+}
 const ModalWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;

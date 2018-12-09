@@ -47,8 +47,9 @@ class UserScore extends React.Component {
         w:
           this.contents.current &&
           this.contents.current.getBoundingClientRect().width,
-        h: this.contents.current &&
-        this.contents.current.getBoundingClientRect().height,
+        h:
+          this.contents.current &&
+          this.contents.current.getBoundingClientRect().height
       }
     });
     ScoreAPI.registerScore(uid, score);
@@ -56,7 +57,7 @@ class UserScore extends React.Component {
 
   render() {
     const { onClose, user, score } = this.props;
-    const {confettiSource} = this.state;
+    const { confettiSource } = this.state;
     return (
       <ModalWrapper>
         <InnterContainer>
