@@ -45,10 +45,10 @@ class UserInfoAuth {
     responseType: "token id_token",
     scope: "openid profile"
   });
-  getProfile(stateHandler) {
-    this.auth.parseHash({ hash: window.location.hash }, (err, authResult) => {
+  getProfile(stateHandler:any) {
+    this.auth.parseHash({ hash: window.location.hash }, (err:any, authResult:anuy) => {
       if(!authResult) return null;
-      this.auth.client.userInfo(authResult.accessToken, (err, user) => {
+      this.auth.client.userInfo(authResult.accessToken, (err:any, user:any) => {
         console.log("<this.auth.client.userInfo> user: ", user);
         stateHandler(user)
         return user;

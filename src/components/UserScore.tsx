@@ -4,16 +4,36 @@ import zIndex from "../constants/zIndex";
 import ScoreAPI from "../services/ScoreAPI";
 import Confetti from "react-confetti";
 import color from "../constants/color";
+import { UserInfo } from "../typedef/User";
 
 interface Props {
-  onClose(): void;
+  onClose: () => void;
   bestScore: number;
+  user: UserInfo;
+  score: number;
 }
 
-class UserScore extends React.Component {
+interface ConfettiSource {
+  x: number | null;
+  y: number| null;
+  w: number| null; // displayサイズにしとけばよさそう
+  h: number| null;
+}
+
+interface State {
+  width: number | null;
+  height: number;
+  numberOfPieces: number;
+  friction: number;
+  wind: number;
+  gravity: number;
+  confettiSource: ConfettiSource;
+}
+
+class UserScore extends React.Component<Props, State> {
   private contents = React.createRef<HTMLParagraphElement>();
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       width: 100,

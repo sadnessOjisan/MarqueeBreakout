@@ -1,8 +1,14 @@
 import * as React from "react";
 import styled from "styled-components";
 import color from "../constants/color";
-import Mode from "../constants/mode";
-interface Props {}
+
+interface Props {
+  handleLogin: () => void;
+  handleLogout: () => void;
+  handleOpenRanking: () => void;
+  handleOpenHow2Use: () => void;
+  isLogin: boolean;
+}
 
 const Home = (props: Props) => {
   const {
@@ -31,7 +37,7 @@ const Home = (props: Props) => {
       {isLogin && (
         <StyledButton onClick={handleLogout}>ログアウトする</StyledButton>
       )}
-      <StyledButton onClick={() => handleOpenRanking()} align="center">
+      <StyledButton onClick={() => handleOpenRanking()}>
         ランキングを確認する
       </StyledButton>
     </Wrapper>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 interface Props {
   className?: string;
-  size?: number;
+  size?: number | undefined;
   color?: string;
   children: React.ReactNode;
   align?: string;
@@ -26,9 +26,9 @@ const Text = (props: Props) => {
 };
 
 const StyledText = styled.p`
-  color: ${props => (props.color ? props.color : "black")};
-  font-size: ${props => (props.size ? props.size : 16)}px;
-  text-align: ${props => (props.align ? props.align : "left")};
+  color: ${(props:any) => (props.color ? props.color : "black")};
+  font-size: ${(props:any) => (props.size ? props.size : 16)}px;
+  text-align: ${(props:any) => (props.align ? props.align : "left")};
 `;
 
 export default Text;

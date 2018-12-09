@@ -6,7 +6,9 @@ import Mode from "../constants/mode";
 import Button from "@atlaskit/button";
 
 interface Props {
-  (obj: any): void;
+  onSelect: (obj: any) => void;
+  onStart: (mode: string) => void;
+  onQuit: () => void;
 }
 
 const Panel = (props: Props) => {

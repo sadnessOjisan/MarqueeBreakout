@@ -408,7 +408,7 @@ class App extends React.Component<Props, State> {
               handleLogout={() => this.handleLogout()}
               handleOpenRanking={() => this.handleModalOpen(Mode.ranking)}
               handleOpenHow2Use={() => this.handleModalOpen(Mode.how2use)}
-              isLogin={user}
+              isLogin={user ? true : false}
             />
           </HomeWrapper>
         )}
