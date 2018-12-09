@@ -5,7 +5,13 @@ import Mode from "../constants/mode";
 interface Props {}
 
 const Home = (props: Props) => {
-  const { handleLogin, handleLogout, handleOpenRanking, handleOpenHow2Use, isLogin } = props;
+  const {
+    handleLogin,
+    handleLogout,
+    handleOpenRanking,
+    handleOpenHow2Use,
+    isLogin
+  } = props;
   return (
     <Wrapper>
       <Container>
@@ -22,7 +28,9 @@ const Home = (props: Props) => {
       {!isLogin && (
         <StyledButton onClick={handleLogin}>ログインする</StyledButton>
       )}
-      {isLogin && <StyledButton onClick={handleLogout}>ログアウトする</StyledButton>}
+      {isLogin && (
+        <StyledButton onClick={handleLogout}>ログアウトする</StyledButton>
+      )}
       <StyledButton onClick={() => handleOpenRanking()} align="center">
         ランキングを確認する
       </StyledButton>
@@ -37,7 +45,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 36px;
 `;
 
 const Title = styled.p`

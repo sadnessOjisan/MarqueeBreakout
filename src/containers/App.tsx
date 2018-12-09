@@ -327,11 +327,11 @@ class App extends React.Component<Props, State> {
     });
   }
 
-  handleLogout(){
+  handleLogout() {
     this.setState({
       user: null
-    })
-    localStorage.removeItem('user')
+    });
+    localStorage.removeItem("user");
   }
 
   render() {
@@ -405,7 +405,7 @@ class App extends React.Component<Props, State> {
               handleLogin={() => {
                 AuthAPI.login();
               }}
-              handleLogout={()=>this.handleLogout()}
+              handleLogout={() => this.handleLogout()}
               handleOpenRanking={() => this.handleModalOpen(Mode.ranking)}
               handleOpenHow2Use={() => this.handleModalOpen(Mode.how2use)}
               isLogin={user}

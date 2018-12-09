@@ -6,6 +6,9 @@
   "author": "sadness_ojisan <sadness.ojisan@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@atlaskit/button": "^10.1.0",
+    "@atlaskit/field-text": "^7.0.17",
+    "@atlaskit/select": "^6.1.12",
     "@types/lodash": "^4.14.118",
     "@types/lodash.throttle": "^4.1.4",
     "@types/react": "^16.7.6",
