@@ -2,18 +2,38 @@ import * as React from "react";
 import styled from "styled-components";
 import zIndex from "../constants/zIndex";
 import ScoreAPI from "../services/ScoreAPI";
-import Confetti from "react-confetti";
+import * as Confetti from "react-confetti";
 import color from "../constants/color";
+import { UserInfo } from "../typedef/User";
 
 interface Props {
-  onClose(): void;
+  onClose: () => void;
   bestScore: number;
+  user: UserInfo | null;
+  score: number;
 }
 
-class UserScore extends React.Component {
+interface ConfettiSource {
+  x: number;
+  y: number;
+  w: number; // displayサイズにしとけばよさそう
+  h: number;
+}
+
+interface State {
+  width: number;
+  height: number;
+  numberOfPieces: number;
+  friction: number;
+  wind: number;
+  gravity: number;
+  confettiSource: ConfettiSource;
+}
+
+class UserScore extends React.Component<Props, State> {
   private contents = React.createRef<HTMLParagraphElement>();
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       width: 100,
@@ -39,28 +59,28 @@ class UserScore extends React.Component {
     }
     this.setState({
       width:
-        this.contents.current &&
-        this.contents.current.getBoundingClientRect().width,
+        this.contents.current ?
+        this.contents.current.getBoundingClientRect().width:this.state.width,
       height:
-        this.contents.current &&
-        this.contents.current.getBoundingClientRect().height,
+        this.contents.current ?
+        this.contents.current.getBoundingClientRect().height:this.state.height,
       confettiSource: {
         x:
-          this.contents.current &&
-          this.contents.current.getBoundingClientRect().width / 2,
+          this.contents.current ?
+          this.contents.current.getBoundingClientRect().width / 2:this.state.confettiSource.x,
         y: 0,
         w:
-          this.contents.current &&
-          this.contents.current.getBoundingClientRect().width,
+          this.contents.current ?
+          this.contents.current.getBoundingClientRect().width:this.state.confettiSource.w,
         h:
-          this.contents.current &&
-          this.contents.current.getBoundingClientRect().height
+          this.contents.current ?
+          this.contents.current.getBoundingClientRect().height:this.state.confettiSource.h,
       }
     });
   }
 
   render() {
-    const { onClose, user, score, bestScore } = this.props;
+    const { onClose, score, bestScore } = this.props;
     const { confettiSource } = this.state;
     return (
       <ModalWrapper>

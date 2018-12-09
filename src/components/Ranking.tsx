@@ -17,17 +17,16 @@ interface State {
 }
 
 class Ranking extends React.Component<Props, State> {
-  constructor(props) {
+  constructor(props:Props) {
     super(props);
     this.state = {
-      scores: []
+      scores: [], 
+      isLoading: false
     };
   }
 
   componentDidMount() {
-    ScoreAPI.getScores().then(res => {
-      console.log(res);
-      const { data } = res;
+    ScoreAPI.getScores().then(data => {
       const { scores } = data;
       this.setState({
         scores: scores

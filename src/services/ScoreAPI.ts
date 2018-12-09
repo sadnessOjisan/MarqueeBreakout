@@ -30,7 +30,7 @@ const ScoreAPI = {
               uid: uid
           }
       })
-      .then(response => {return response})
+      .then(response => {return response.data})
       .catch(error => ({
         error
       }));
@@ -38,7 +38,7 @@ const ScoreAPI = {
   getScores(){
     return axios
       .get("http://localhost:3000/scores")
-      .then(response => {return response})
+      .then(response => {return response.data})
       .catch(error => ({
         error
       }));

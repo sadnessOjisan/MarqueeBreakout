@@ -8,13 +8,13 @@ import Gr from "../assets/GraphQL.svg";
 import Br from "../assets/browserify.svg";
 
 interface State {
-  id: number | null;
-  top: number | null;
-  left: number | null;
-  right: number | null;
-  bottom: number | null;
+  id: number;
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
   isCollapsed: boolean;
-  img: string | null;
+  img: string;
 }
 
 interface Position {
@@ -27,6 +27,7 @@ interface Position {
 interface Props {
   ballPosition: Position;
   idx: number;
+  onCollide: (bottom:any)=>void;
 }
 
 class Block extends React.Component<Props, State> {
@@ -35,13 +36,13 @@ class Block extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      id: null,
-      top: null,
-      left: null,
-      right: null,
-      bottom: null,
+      id: 0,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
       isCollapsed: false,
-      img: null
+      img: ''
     };
   }
 
@@ -118,7 +119,7 @@ class Block extends React.Component<Props, State> {
   }
 }
 
-const BlockOutline = styled.div`
+const BlockOutline = styled.div<any>`
   visibility: ${(props: any) => (props.isCollapsed ? "hidden" : "initial")};
   width: 30px;
   height: 30px;

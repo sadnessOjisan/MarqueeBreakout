@@ -14,6 +14,7 @@ import userAPI from "../services/userAPI";
 import { splitCurrentURL, setHeader } from "../util/helper";
 import ScoreAPI from "../services/ScoreAPI";
 import Home from "../components/Home";
+import { UserInfo } from "../typedef/User";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -42,21 +43,10 @@ declare global {
 interface Props {}
 
 interface Position {
-  family_name: string;
-  given_name: string;
-  locale: string;
-  name: string;
-  nickname: string;
-  picture: string;
-  sub: string;
-  updated_at: string;
-}
-
-interface User {
-  top: number | null;
-  left: number | null;
-  bottom: number | null;
-  right: number | null;
+  top: number;
+  left: number;
+  bottom: number;
+  right: number;
 }
 
 interface State {
@@ -79,7 +69,7 @@ interface State {
   mode: string;
   isLogin: boolean;
   accessToken: string;
-  user: User;
+  user: UserInfo | null;
   bestScore: number;
 }
 
@@ -97,12 +87,13 @@ class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.text = React.createRef();
+
     this.state = {
       barPositon: {
-        top: null,
-        left: null,
-        right: null,
-        bottom: null
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
       },
       barSpeed: 30,
       ballXSpeed: 30,
@@ -120,14 +111,15 @@ class App extends React.Component<Props, State> {
       },
       vBallDirection: "up",
       hBallDirection: "right",
-      bounceBorder: 34,
+      bounceBorder: 0,
       isStart: false,
       score: 0,
       isModalOpen: false,
       mode: Mode.normal,
       isLogin: false,
       accessToken: "",
-      bestScore: 0
+      bestScore: 0, 
+      user:null
     };
   }
 
@@ -164,24 +156,21 @@ class App extends React.Component<Props, State> {
     return null;
   }
 
-  handleClide = throttle(this.bounceBall, 100);
+  handleClide = throttle(this.bounceBall, 10);
 
-  bounceBall(blockBottom) {
+  bounceBall() {
     this.setState({
-      bounceBorder: 0, // 跳ね返り計算は諦めた
       score: this.state.score + 1
     });
   }
 
-  setUserInfo(user) {
+  setUserInfo(user: UserInfo) {
     localStorage.removeItem("user"); // 初期化
     this.setState({
       user: user
     });
     const uid = user.sub;
     userAPI.registerUser(uid, user.name);
-    const highScore = ScoreAPI.getMyHighScore(uid);
-    console.log("highscore: ", highScore);
     localStorage.setItem("user", JSON.stringify(user));
   }
 
@@ -191,17 +180,17 @@ class App extends React.Component<Props, State> {
     switch (type) {
       case "BAR_SPEED":
         this.setState({
-          barSpeed: value
+          barSpeed: Number(value)
         });
         break;
       case "BALL_X_SPEED":
         this.setState({
-          ballXSpeed: value
+          ballXSpeed: Number(value)
         });
         break;
       case "BALL_Y_SPEED":
         this.setState({
-          ballYSpeed: value
+          ballYSpeed: Number(value)
         });
         break;
       case "BALL_X_BEHAVIOR":
@@ -221,12 +210,12 @@ class App extends React.Component<Props, State> {
         break;
       case "WIDTH":
         this.setState({
-          width: value
+          width: Number(value)
         });
         break;
       case "HEIGHT":
         this.setState({
-          height: value
+          height: Number(value)
         });
         break;
       default:
@@ -236,10 +225,11 @@ class App extends React.Component<Props, State> {
 
   componentDidMount() {
     const { isLogin } = this.state;
-    const user = JSON.parse(localStorage.getItem("user"));
+    const userString:string|null = localStorage.getItem("user")
+    const user = JSON.parse(String(userString));
     if (!isLogin && !user) {
       // 見ログインかつuser情報を持たない時
-      const params = splitCurrentURL("#");
+      const params:any = splitCurrentURL("#");
       if (params) {
         const id = params.id_token;
         this.setState({
@@ -247,7 +237,7 @@ class App extends React.Component<Props, State> {
           isLogin: true
         });
         setHeader(id);
-        AuthAPI.getProfile(u => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
+        AuthAPI.getProfile((u:UserInfo) => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
       }
     } else {
       // user情報をすでに持っていた時
@@ -255,12 +245,9 @@ class App extends React.Component<Props, State> {
         user: user
       });
       const uid = user.sub;
-      ScoreAPI.getMyHighScore(uid).then(res => {
-        console.log(res);
-        const { data } = res;
+      ScoreAPI.getMyHighScore(uid).then(data => {
         const { score } = data;
         this.setState({
-          accessToken: id,
           isLogin: true,
           bestScore: score
         });
@@ -336,7 +323,6 @@ class App extends React.Component<Props, State> {
 
   render() {
     const {
-      barPositon,
       ballPosition,
       vBallDirection,
       hBallDirection,
@@ -355,8 +341,6 @@ class App extends React.Component<Props, State> {
       user,
       bestScore
     } = this.state;
-    const ballTop = ballPosition.top;
-    const ballRight = ballPosition.right;
     return (
       <Wrapper>
         <GlobalStyle />
@@ -369,7 +353,7 @@ class App extends React.Component<Props, State> {
                 .map((_, idx) => (
                   <Block
                     ballPosition={ballPosition}
-                    onCollide={bottom => this.handleClide(bottom)}
+                    onCollide={(bottom:any) => this.handleClide()}
                     idx={idx}
                     key={idx}
                   />
@@ -408,7 +392,7 @@ class App extends React.Component<Props, State> {
               handleLogout={() => this.handleLogout()}
               handleOpenRanking={() => this.handleModalOpen(Mode.ranking)}
               handleOpenHow2Use={() => this.handleModalOpen(Mode.how2use)}
-              isLogin={user}
+              isLogin={user ? true : false}
             />
           </HomeWrapper>
         )}

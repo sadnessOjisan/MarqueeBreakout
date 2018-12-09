@@ -11,6 +11,9 @@
         "module": "ES2015",
         "target": "es5",
         "jsx": "react", 
-        "moduleResolution": "node"
+        "moduleResolution": "node", 
+        "allowJs":true, 
+        "checkJs":false, 
+        "skipLibCheck":true, 
     }
 }

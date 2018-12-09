@@ -5,7 +5,7 @@ const AuthAPI = {
     const auth = new Auth0();
     auth.login(); 
   },
-   getProfile(stateHandler) {
+   getProfile(stateHandler:any) {
     const auth = new UserInfoAuth();
     auth.getProfile(stateHandler); 
   },

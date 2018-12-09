@@ -1,14 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 import zIndex from "../constants/zIndex";
-import { Score } from "../typedef/Score";
 import color from "../constants/color";
 
 interface Props {
   onClose(): void;
 }
 
-const How2Use = props => {
+const How2Use = (props: Props) => {
   const { onClose } = props;
   return (
     <ModalWrapper>
