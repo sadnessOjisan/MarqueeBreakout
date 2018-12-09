@@ -33,7 +33,10 @@ class UserScore extends React.Component {
 
   componentDidMount() {
     const { user, score } = this.props;
-    const uid = user.sub;
+    if (user) {
+      const uid = user.sub;
+      ScoreAPI.registerScore(uid, score);
+    }
     this.setState({
       width:
         this.contents.current &&
@@ -54,7 +57,6 @@ class UserScore extends React.Component {
           this.contents.current.getBoundingClientRect().height
       }
     });
-    ScoreAPI.registerScore(uid, score);
   }
 
   render() {
