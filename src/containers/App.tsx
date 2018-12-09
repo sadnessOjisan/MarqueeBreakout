@@ -8,11 +8,12 @@ import Ranking from "../components/Ranking";
 import UserScore from "../components/UserScore";
 import zIndex from "../constants/zIndex";
 import Mode from "../constants/mode";
-import Text from "../components/Text";
+import How2Use from "../components/How2Use";
 import AuthAPI from "../services/AuthAPI";
 import userAPI from "../services/userAPI";
 import { splitCurrentURL, setHeader } from "../util/helper";
 import ScoreAPI from "../services/ScoreAPI";
+import Home from "../components/Home";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -326,6 +327,13 @@ class App extends React.Component<Props, State> {
     });
   }
 
+  handleLogout(){
+    this.setState({
+      user: null
+    })
+    localStorage.removeItem('user')
+  }
+
   render() {
     const {
       barPositon,
@@ -347,7 +355,6 @@ class App extends React.Component<Props, State> {
       user,
       bestScore
     } = this.state;
-    console.log("this.state", this.state);
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
@@ -393,34 +400,17 @@ class App extends React.Component<Props, State> {
             </marquee>
           </GameCanvas>
         ) : (
-          <div>
-            <p
-              onClick={() => {
+          <HomeWrapper>
+            <Home
+              handleLogin={() => {
                 AuthAPI.login();
               }}
-            >
-              login
-            </p>
-            <p
-              onClick={() => {
-                AuthAPI.getProfile(u => this.setUserInfo(u));
-              }}
-            >
-              get user info
-            </p>
-            <Text align="center">paramを設定してください</Text>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <Text
-              onClick={() => this.handleModalOpen(Mode.ranking)}
-              align="center"
-            >
-              ランキングを確認する
-            </Text>
-          </div>
+              handleLogout={()=>this.handleLogout()}
+              handleOpenRanking={() => this.handleModalOpen(Mode.ranking)}
+              handleOpenHow2Use={() => this.handleModalOpen(Mode.how2use)}
+              isLogin={user}
+            />
+          </HomeWrapper>
         )}
         <Panel
           onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)}
@@ -436,6 +426,8 @@ class App extends React.Component<Props, State> {
             score={score}
             bestScore={bestScore}
           />
+        ) : isModalOpen && mode === Mode.how2use ? (
+          <How2Use onClose={() => this.handleCloseModal()} />
         ) : (
           <React.Fragment />
         )}
@@ -447,6 +439,10 @@ class App extends React.Component<Props, State> {
 const BlockWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+`;
+
+const HomeWrapper = styled.div`
+  height: 100vh;
 `;
 
 const GameCanvas = styled.div`

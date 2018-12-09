@@ -20,7 +20,8 @@
     "react-confetti": "^2.3.0",
     "react-dom": "^16.6.3",
     "react-dom-confetti": "^0.0.10",
-    "styled-components": "^4.1.1"
+    "styled-components": "^4.1.1",
+    "styled-spinkit": "^0.4.0"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
