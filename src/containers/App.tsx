@@ -4,10 +4,16 @@ import styled from "styled-components";
 import { throttle } from "lodash";
 import { createGlobalStyle } from "styled-components";
 import Panel from "../components/Panel";
+import Ranking from "../components/Ranking";
 import UserScore from "../components/UserScore";
 import zIndex from "../constants/zIndex";
 import Mode from "../constants/mode";
-import Text from '../components/Text';
+import How2Use from "../components/How2Use";
+import AuthAPI from "../services/AuthAPI";
+import userAPI from "../services/userAPI";
+import { splitCurrentURL, setHeader } from "../util/helper";
+import ScoreAPI from "../services/ScoreAPI";
+import Home from "../components/Home";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -36,6 +42,17 @@ declare global {
 interface Props {}
 
 interface Position {
+  family_name: string;
+  given_name: string;
+  locale: string;
+  name: string;
+  nickname: string;
+  picture: string;
+  sub: string;
+  updated_at: string;
+}
+
+interface User {
   top: number | null;
   left: number | null;
   bottom: number | null;
@@ -58,8 +75,12 @@ interface State {
   height: number;
   isStart: boolean;
   score: number;
-  isModalOpen: boolean; 
+  isModalOpen: boolean;
   mode: string;
+  isLogin: boolean;
+  accessToken: string;
+  user: User;
+  bestScore: number;
 }
 
 interface EventObject {
@@ -92,42 +113,55 @@ class App extends React.Component<Props, State> {
       width: 100,
       height: 100,
       ballPosition: {
-        top: null,
-        left: null,
-        right: null,
-        bottom: null
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
       },
       vBallDirection: "up",
       hBallDirection: "right",
       bounceBorder: 34,
       isStart: false,
-      score: 0, 
-      isModalOpen: false, 
-      mode: Mode.normal
+      score: 0,
+      isModalOpen: false,
+      mode: Mode.normal,
+      isLogin: false,
+      accessToken: "",
+      bestScore: 0
     };
   }
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     const { barPositon, ballPosition, isStart, score, mode } = prevState;
     const ballBottom = ballPosition.bottom;
-    if (ballBottom > 632) {
+    if (isStart && ballBottom > 632) {
       const barLeft = barPositon.left;
       const barRight = barPositon.right;
       const ballLeft = ballPosition.left;
       const ballRight = ballPosition.right;
       if (ballRight < barLeft || ballLeft > barRight) {
-        if (isStart && score !== 0) {
-          if(mode === Mode.normal){
-            alert('げーむおーばー');
-            return { isStart: false, score: 0 };
-          }else{
-            console.log('[無敵モード]あなたはいま死にました')
+        if (score !== 0) {
+          if (mode === Mode.normal) {
+            return {
+              isStart: false,
+              mode: Mode.score,
+              isModalOpen: true,
+              ballPosition: {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0
+              }
+            };
+          } else if (mode === Mode.practice) {
+            console.log("[無敵モード]あなたはいま死にました");
           }
         }
         return { isStart: true };
       }
       return null;
     }
+    return null;
   }
 
   handleClide = throttle(this.bounceBall, 100);
@@ -137,6 +171,18 @@ class App extends React.Component<Props, State> {
       bounceBorder: 0, // 跳ね返り計算は諦めた
       score: this.state.score + 1
     });
+  }
+
+  setUserInfo(user) {
+    localStorage.removeItem("user"); // 初期化
+    this.setState({
+      user: user
+    });
+    const uid = user.sub;
+    userAPI.registerUser(uid, user.name);
+    const highScore = ScoreAPI.getMyHighScore(uid);
+    console.log("highscore: ", highScore);
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   setMarqueeProperty(message: EventObject) {
@@ -189,6 +235,37 @@ class App extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    const { isLogin } = this.state;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!isLogin && !user) {
+      // 見ログインかつuser情報を持たない時
+      const params = splitCurrentURL("#");
+      if (params) {
+        const id = params.id_token;
+        this.setState({
+          accessToken: id,
+          isLogin: true
+        });
+        setHeader(id);
+        AuthAPI.getProfile(u => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
+      }
+    } else {
+      // user情報をすでに持っていた時
+      this.setState({
+        user: user
+      });
+      const uid = user.sub;
+      ScoreAPI.getMyHighScore(uid).then(res => {
+        console.log(res);
+        const { data } = res;
+        const { score } = data;
+        this.setState({
+          accessToken: id,
+          isLogin: true,
+          bestScore: score
+        });
+      });
+    }
     setInterval(() => {
       if (this.text.current && this.ball.current) {
         const barPosition = this.text.current.getBoundingClientRect();
@@ -221,29 +298,40 @@ class App extends React.Component<Props, State> {
     }, 1);
   }
 
-  handleClickStartButton(mode:string) {
+  handleClickStartButton(mode: string) {
     this.setState({
-      isStart: true, 
-      mode: mode
+      isStart: true,
+      isModalOpen: false,
+      mode: mode,
+      score: 0
     });
   }
 
-  handleGameQuit(){
+  handleGameQuit() {
     this.setState({
       isStart: false
     });
   }
 
-  handleCloseModal(){
+  handleCloseModal() {
     this.setState({
-      isModalOpen: false
+      isModalOpen: false,
+      isStart: false
     });
   }
 
-  handleModalOpen(){
+  handleModalOpen(mode: string) {
     this.setState({
-      isModalOpen: true
+      isModalOpen: true,
+      mode: mode
     });
+  }
+
+  handleLogout() {
+    this.setState({
+      user: null
+    });
+    localStorage.removeItem("user");
   }
 
   render() {
@@ -260,22 +348,25 @@ class App extends React.Component<Props, State> {
       ballYBehavior,
       barBehavior,
       width,
-      isStart, 
-      isModalOpen, 
-      score
+      isStart,
+      isModalOpen,
+      score,
+      mode,
+      user,
+      bestScore
     } = this.state;
     const ballTop = ballPosition.top;
     const ballRight = ballPosition.right;
     return (
       <Wrapper>
         <GlobalStyle />
-        {isStart ? (
+        {isStart && (mode === Mode.normal || mode === Mode.practice) ? (
           <GameCanvas>
             <Score>your score is {score}. </Score>
             <BlockWrapper>
-              {Array(1000)
+              {Array(300)
                 .fill(0)
-                .map((_,idx) => (
+                .map((_, idx) => (
                   <Block
                     ballPosition={ballPosition}
                     onCollide={bottom => this.handleClide(bottom)}
@@ -297,9 +388,7 @@ class App extends React.Component<Props, State> {
                 direction={hBallDirection}
                 width={`${width}%`}
               >
-                <Ball ref={this.ball}>
-                  ●
-                </Ball>
+                <Ball ref={this.ball}>●</Ball>
               </marquee>
             </marquee>
             <marquee
@@ -311,18 +400,37 @@ class App extends React.Component<Props, State> {
             </marquee>
           </GameCanvas>
         ) : (
-          <div>
-            <Text align='center'>paramを設定してください</Text>
-            <br /><br /><br /><br /><br />
-            <Text onClick={()=>this.handleModalOpen()} align='center'>ランキングを確認する</Text>
-            </div>
+          <HomeWrapper>
+            <Home
+              handleLogin={() => {
+                AuthAPI.login();
+              }}
+              handleLogout={() => this.handleLogout()}
+              handleOpenRanking={() => this.handleModalOpen(Mode.ranking)}
+              handleOpenHow2Use={() => this.handleModalOpen(Mode.how2use)}
+              isLogin={user}
+            />
+          </HomeWrapper>
         )}
         <Panel
           onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)}
-          onStart={(mode:string) => this.handleClickStartButton(mode)}
-          onQuit={()=>this.handleGameQuit()}
+          onStart={(mode: string) => this.handleClickStartButton(mode)}
+          onQuit={() => this.handleGameQuit()}
         />
-        {isModalOpen && <UserScore onClose={()=>this.handleCloseModal()} />}
+        {isModalOpen && mode === Mode.ranking ? (
+          <Ranking onClose={() => this.handleCloseModal()} user={user} />
+        ) : isModalOpen && mode === Mode.score ? (
+          <UserScore
+            onClose={() => this.handleCloseModal()}
+            user={user}
+            score={score}
+            bestScore={bestScore}
+          />
+        ) : isModalOpen && mode === Mode.how2use ? (
+          <How2Use onClose={() => this.handleCloseModal()} />
+        ) : (
+          <React.Fragment />
+        )}
       </Wrapper>
     );
   }
@@ -331,6 +439,10 @@ class App extends React.Component<Props, State> {
 const BlockWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
+`;
+
+const HomeWrapper = styled.div`
+  height: 100vh;
 `;
 
 const GameCanvas = styled.div`
@@ -347,11 +459,11 @@ const Wrapper = styled.div`
 `;
 
 const Score = styled.p`
-  position: absolute; 
-  top: 50%; 
+  position: absolute;
+  top: 50%;
   left: 40%;
   text-align: center;
   font-size: 36px;
-`
+`;
 
 export default App;

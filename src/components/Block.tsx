@@ -1,12 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
-import Re from '../assets/react.svg';
-import Vu from '../assets/vue.svg';
-import Ng from '../assets/angular.svg';
-import Gu from '../assets/gulp.svg';
-import Gr from '../assets/GraphQL.svg';
-import Br from '../assets/browserify.svg'
-
+import Re from "../assets/react.svg";
+import Vu from "../assets/vue.svg";
+import Ng from "../assets/angular.svg";
+import Gu from "../assets/gulp.svg";
+import Gr from "../assets/GraphQL.svg";
+import Br from "../assets/browserify.svg";
 
 interface State {
   id: number | null;
@@ -15,7 +14,7 @@ interface State {
   right: number | null;
   bottom: number | null;
   isCollapsed: boolean;
-  img: string | null
+  img: string | null;
 }
 
 interface Position {
@@ -27,7 +26,7 @@ interface Position {
 
 interface Props {
   ballPosition: Position;
-  idx: number
+  idx: number;
 }
 
 class Block extends React.Component<Props, State> {
@@ -41,39 +40,39 @@ class Block extends React.Component<Props, State> {
       left: null,
       right: null,
       bottom: null,
-      isCollapsed: false, 
+      isCollapsed: false,
       img: null
     };
   }
 
   componentDidMount() {
-    const{idx} = this.props;
-    let img:string;
+    const { idx } = this.props;
+    let img: string;
     const amari = idx % 6;
-    switch(amari){
-      case 0: 
+    switch (amari) {
+      case 0:
         img = Re;
         break;
-      case 1: 
+      case 1:
         img = Vu;
         break;
-      case 2: 
+      case 2:
         img = Ng;
         break;
-        case 3: 
+      case 3:
         img = Gu;
         break;
-        case 4: 
+      case 4:
         img = Gr;
         break;
-        case 5: 
+      case 5:
         img = Br;
         break;
-      default: 
-        img = Re
+      default:
+        img = Re;
         break;
     }
-    
+
     if (this.block.current) {
       const blockPosition = this.block.current.getBoundingClientRect();
       const blockLeftPosition = blockPosition.left;
@@ -85,7 +84,7 @@ class Block extends React.Component<Props, State> {
         top: blockTopPosition,
         left: blockLeftPosition,
         right: blockRightPosition,
-        bottom: blockBottomPosition, 
+        bottom: blockBottomPosition,
         img: img
       });
     }
@@ -121,8 +120,8 @@ class Block extends React.Component<Props, State> {
 
 const BlockOutline = styled.div`
   visibility: ${(props: any) => (props.isCollapsed ? "hidden" : "initial")};
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 `;
 
 export default Block;
