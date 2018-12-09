@@ -1,4 +1,4 @@
-import auth0 from "auth0-js";
+import * as auth0 from "auth0-js";
 
 export default class Auth {
   auth = new auth0.WebAuth({
@@ -9,9 +9,6 @@ export default class Auth {
     responseType: "token id_token",
     scope: "openid profile"
   });
-  signUp() {
-    // this.auth.
-  }
   login() {
     this.auth.authorize();
   }
@@ -46,7 +43,7 @@ class UserInfoAuth {
     scope: "openid profile"
   });
   getProfile(stateHandler:any) {
-    this.auth.parseHash({ hash: window.location.hash }, (err:any, authResult:anuy) => {
+    this.auth.parseHash({ hash: window.location.hash }, (err:any, authResult:any) => {
       if(!authResult) return null;
       this.auth.client.userInfo(authResult.accessToken, (err:any, user:any) => {
         console.log("<this.auth.client.userInfo> user: ", user);

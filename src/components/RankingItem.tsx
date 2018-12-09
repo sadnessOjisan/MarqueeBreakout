@@ -35,11 +35,11 @@ const RankingItem = (props: Props) => {
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<any>`
   width: 100%;
   display: flex;
   align-items: center;
-  background-color: ${props => props.isMe && color.blue};
+  background-color: ${(props: any) => props.isMe && color.blue};
 `;
 
 const RankWrapper = styled.div`

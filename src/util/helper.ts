@@ -6,12 +6,10 @@ export const splitCurrentURL = (delimiter: string) => {
     }
     console.log(location.href.split(delimiter))
     let url = location.href.split(delimiter)[1];
-    console.log("url:", url);
-    let params = {};
-    url = url.split("&");
-    console.log("url2: ", url);
-    for (var i = 0; i < url.length; i++) {
-      var split_cache = url[i].split("=");
+    let params:any = {};
+    let urlArray = url.split("&");
+    for (var i = 0; i < urlArray.length; i++) {
+      var split_cache = urlArray[i].split("=");
       params[split_cache[0]] = split_cache[1];
     }
     console.log("params: ", params);

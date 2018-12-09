@@ -7,7 +7,7 @@ interface Props {
   onClose(): void;
 }
 
-const How2Use = (props:Props) => {
+const How2Use = (props: Props) => {
   const { onClose } = props;
   return (
     <ModalWrapper>
