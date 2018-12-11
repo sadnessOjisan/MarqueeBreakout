@@ -1,4 +1,5 @@
 import axios from "axios";
+import HOST_URL from '../constants/url'
 
 const ScoreAPI = {
     /**
@@ -8,7 +9,7 @@ const ScoreAPI = {
      */
   registerScore(uid:string, score:number) {
     return axios
-      .post("http://localhost:3000/register_score", 
+      .post(`${HOST_URL}/register_score`, 
       {
         uid,score
       })
@@ -25,7 +26,7 @@ const ScoreAPI = {
    */
   getMyHighScore(uid:string) {
     return axios
-      .get("http://localhost:3000/my_score",{
+      .get(`${HOST_URL}/my_score`,{
           params: {
               uid: uid
           }
@@ -37,7 +38,7 @@ const ScoreAPI = {
   },
   getScores(){
     return axios
-      .get("http://localhost:3000/scores")
+      .get(`${HOST_URL}/scores`)
       .then(response => {return response.data})
       .catch(error => ({
         error
