@@ -4,6 +4,8 @@ import {ROOT} from '../constants/url'
 const AUTHZERO_DOMAIN = process.env.AUTHZERO_DOMAIN ? process.env.AUTHZERO_DOMAIN:''
 const AUTHZERO_CLIENT_ID = process.env.AUTHZERO_CLIENT_ID ? process.env.AUTHZERO_CLIENT_ID:''
 
+console.log('AUTHZERO_CLIENT_ID: ', AUTHZERO_CLIENT_ID)
+
 export default class Auth {
   auth = new auth0.WebAuth({
     domain: AUTHZERO_DOMAIN,

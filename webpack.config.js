@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
+require('dotenv').config()
 const env = process.env.BUILD_MODE;
 
 module.exports = {
