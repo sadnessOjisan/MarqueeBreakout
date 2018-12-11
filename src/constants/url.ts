@@ -1,5 +1,5 @@
 let HOST_URL;
-let ROOT;
+let ROOT:string;
 
 const env = process.env.REACT_APP_ENV;
 console.log('env: ', env)
@@ -13,4 +13,4 @@ if (env === "production") {
 }
 
 export default HOST_URL as string;
-export let REDIRECT_URI = ROOT;
+export {ROOT};
