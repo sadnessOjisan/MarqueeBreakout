@@ -31,7 +31,9 @@ module.exports = {
     }), 
     new webpack.DefinePlugin({
       "process.env": {
-        REACT_APP_ENV: JSON.stringify(process.env.REACT_APP_ENV)
+        REACT_APP_ENV: JSON.stringify(process.env.REACT_APP_ENV), 
+        AUTHZERO_DOMAIN: JSON.stringify(process.env.AUTHZERO_DOMAIN), 
+        AUTHZERO_CLIENT_ID: JSON.stringify(process.env.AUTHZERO_CLIENT_ID)
       }
     })
   ],
