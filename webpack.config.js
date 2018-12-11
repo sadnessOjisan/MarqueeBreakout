@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
-
+const webpack = require("webpack");
 const env = process.env.BUILD_MODE;
 
 module.exports = {
@@ -28,6 +28,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: "index.html"
+    }), 
+    new webpack.DefinePlugin({
+      "process.env": {
+        REACT_APP_ENV: JSON.stringify(process.env.REACT_APP_ENV)
+      }
     })
   ],
   devServer: {

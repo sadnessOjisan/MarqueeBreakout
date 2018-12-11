@@ -2,6 +2,7 @@ let HOST_URL;
 let ROOT;
 
 const env = process.env.REACT_APP_ENV;
+console.log('env: ', env)
 
 if (env === "production") {
   HOST_URL = "https://marquee-breakout-server-lthcjbuowi.now.sh";
