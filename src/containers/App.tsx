@@ -16,6 +16,7 @@ import ScoreAPI from "../services/ScoreAPI";
 import Home from "../components/Home";
 import { UserInfo } from "../typedef/User";
 import EventListener from "react-event-listener";
+import axios from 'axios';
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -234,11 +235,11 @@ class App extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { isLogin } = this.state;
     const userString: string | null = localStorage.getItem("user");
     const accessToken: string | null = localStorage.getItem("accessToken");
     const user = JSON.parse(String(userString));
-    if (!isLogin && !user && !accessToken) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    if (!user) {
       // 見ログインかつuser情報を持たない時
       const params: any = splitCurrentURL("#");
       if (params) {
