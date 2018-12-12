@@ -236,10 +236,12 @@ class App extends React.Component<Props, State> {
 
   componentDidMount() {
     const userString: string | null = localStorage.getItem("user");
-    const accessToken: string | null = localStorage.getItem("accessToken");
+    const accessTokenString: string | null = localStorage.getItem("accessToken");
     const user = JSON.parse(String(userString));
+    const accessToken: string | null = JSON.parse(String(accessTokenString));
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     if (!user) {
+      console.log('!user accessToken: ', accessToken)
       // 見ログインかつuser情報を持たない時
       const params: any = splitCurrentURL("#");
       if (params) {
@@ -254,6 +256,7 @@ class App extends React.Component<Props, State> {
         AuthAPI.getProfile((u: UserInfo) => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
       }
     } else {
+      console.log('user accessToken: ', accessToken)
       // user情報をすでに持っていた時
       this.setState({
         user: user
