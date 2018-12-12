@@ -238,7 +238,7 @@ class App extends React.Component<Props, State> {
     const userString: string | null = localStorage.getItem("user");
     const accessTokenString: string | null = localStorage.getItem("accessToken");
     const user = JSON.parse(String(userString));
-    const accessToken: string | null = JSON.parse(String(accessTokenString));
+    const accessToken: string | null = accessTokenString? JSON.parse(String(accessTokenString)):'';
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     if (!user) {
       // 見ログインかつuser情報を持たない時
