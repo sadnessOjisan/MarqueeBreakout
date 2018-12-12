@@ -15,6 +15,7 @@ import { splitCurrentURL, setHeader } from "../util/helper";
 import ScoreAPI from "../services/ScoreAPI";
 import Home from "../components/Home";
 import { UserInfo } from "../typedef/User";
+import EventListener from 'react-event-listener';
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -122,6 +123,15 @@ class App extends React.Component<Props, State> {
       user:null
     };
   }
+
+  handleResize = () => {
+    const h = window.innerHeight
+    const w = window.innerWidth
+    if(h  < 959 || w < 700){
+      alert('画面サイズが小さすぎます. 大きい画面で試してください. ')
+      window.location.href = 'https://www.google.co.jp/'
+    }
+  };
 
   static getDerivedStateFromProps(nextProps: Props, prevState: State) {
     const { barPositon, ballPosition, isStart, score, mode } = prevState;
@@ -342,6 +352,7 @@ class App extends React.Component<Props, State> {
     } = this.state;
     return (
       <Wrapper>
+        <EventListener target="window" onResize={this.handleResize} />
         <GlobalStyle />
         {isStart && (mode === Mode.normal || mode === Mode.practice) ? (
           <GameCanvas>

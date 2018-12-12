@@ -3,6 +3,7 @@ import * as ReactDOM from "react-dom";
 import App from "./containers/App";
 import { createGlobalStyle } from "styled-components";
 
+
 const GlobalStyle = createGlobalStyle`
   *,
 *:after,
