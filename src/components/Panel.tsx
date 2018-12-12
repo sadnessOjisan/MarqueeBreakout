@@ -5,10 +5,21 @@ import Select from "@atlaskit/select";
 import Mode from "../constants/mode";
 import Button from "@atlaskit/button";
 
+interface FormValues {
+  barSpeed:number;
+  ballXSpeed:number;
+  ballYSpeed:number;
+  ballXBehavior:string;
+  ballYBehavior:string;
+  barBehavior:string;
+  width:number;
+}
+
 interface Props {
   onSelect: (obj: any) => void;
   onStart: (mode: string) => void;
   onQuit: () => void;
+  formValues: FormValues;
 }
 
 interface SelectEvent extends React.FormEvent<HTMLInputElement> {
@@ -16,28 +27,32 @@ interface SelectEvent extends React.FormEvent<HTMLInputElement> {
 }
 
 const Panel = (props: Props) => {
-  const { onSelect, onStart, onQuit } = props;
+  const { onSelect, onStart, onQuit,formValues } = props;
   return (
     <Wrapper>
       <TextField
         onChange={(e:SelectEvent) => onSelect({ type: "BAR_SPEED", value: e.target.value })}
         label="bar scroll speed"
+        value={String(formValues.barSpeed)}
       />
       <TextField
         onChange={(e:SelectEvent) =>
           onSelect({ type: "BALL_X_SPEED", value: e.target.value })
         }
         label="ball x scroll speed"
+        value={String(formValues.ballXSpeed)}
       />
       <TextField
         onChange={(e:SelectEvent) =>
           onSelect({ type: "BALL_Y_SPEED", value: e.target.value })
         }
         label="ball y scroll speed"
+        value={String(formValues.ballYSpeed)}
       />
       <TextField
         onChange={(e:SelectEvent) => onSelect({ type: "WIDTH", value: e.target.value })}
         label="ball area width"
+        value={String(formValues.width)}
       />
       <div>
         <Heading>BALL_X_BEHAVIOR</Heading>
@@ -66,7 +81,20 @@ const Panel = (props: Props) => {
           onChange={(e:any) => onSelect({ type: "BALL_Y_BEHAVIOR", value: e.value })}
         />
       </div>
-
+      <div>
+        <Heading>BAR_BEHAVIOR</Heading>
+        <Select
+          className="single-select"
+          classNamePrefix="react-select"
+          options={[
+            { label: "alternate", value: "alternate" },
+            { label: "scroll", value: "scroll" },
+            { label: "slide", value: "slide" }
+          ]}
+          placeholder="BAR_BEHAVIOR"
+          onChange={(e:any) => onSelect({ type: "BAR_BEHAVIOR", value: e.value })}
+        />
+      </div>
       <ButtonRow>
         <StyledButton onClick={() => onQuit()} appearance="danger">
           ゲームをやめる

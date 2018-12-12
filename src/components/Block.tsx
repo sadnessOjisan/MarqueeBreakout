@@ -27,7 +27,7 @@ interface Position {
 interface Props {
   ballPosition: Position;
   idx: number;
-  onCollide: (bottom:any)=>void;
+  onCollide: (bottom: any) => void;
 }
 
 class Block extends React.Component<Props, State> {
@@ -42,7 +42,7 @@ class Block extends React.Component<Props, State> {
       right: 0,
       bottom: 0,
       isCollapsed: false,
-      img: ''
+      img: ""
     };
   }
 
@@ -102,7 +102,6 @@ class Block extends React.Component<Props, State> {
         left <= blockState.right &&
         bottom >= blockState.top
       ) {
-        console.log(bottom);
         onCollide(bottom);
         return { isCollapsed: true };
       }

@@ -17,10 +17,10 @@ interface State {
 }
 
 class Ranking extends React.Component<Props, State> {
-  constructor(props:Props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      scores: [], 
+      scores: [],
       isLoading: false
     };
   }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import HOST_URL from '../constants/url'
 
 const UserAPI = {
     /**
@@ -8,7 +9,7 @@ const UserAPI = {
      */
   registerUser(uid:string, name:string) {
     return axios
-      .post("http://localhost:3000/register_user", 
+      .post(`${HOST_URL}/register_user`, 
       {
         uid,name
       })

@@ -1,11 +1,12 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
-
+const webpack = require("webpack");
+require('dotenv').config()
 const env = process.env.BUILD_MODE;
 
 module.exports = {
   mode: env || "development",
-  entry: path.join(__dirname, './src', 'main.tsx'),
+  entry: './src/main.tsx',
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "build.js"
@@ -19,10 +20,6 @@ module.exports = {
       test: /\.(jpg|png|svg)$/,
       loaders: 'url-loader'
     },
-    {
-      test: /\.(jpg|png|svg)$/,
-      loaders: 'html-loader'
-    },
     { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }]
   },
   resolve: {
@@ -30,8 +27,15 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src', 'index.html'),
+      template: './src/index.html',
       filename: "index.html"
+    }), 
+    new webpack.DefinePlugin({
+      "process.env": {
+        REACT_APP_ENV: JSON.stringify(process.env.REACT_APP_ENV), 
+        AUTHZERO_DOMAIN: JSON.stringify(process.env.AUTHZERO_DOMAIN), 
+        AUTHZERO_CLIENT_ID: JSON.stringify(process.env.AUTHZERO_CLIENT_ID)
+      }
     })
   ],
   devServer: {

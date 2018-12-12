@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 interface Props {
   className?: string;
-  size: any;
+  size?: any;
   color?: string;
   children: React.ReactNode;
   align?: string;
