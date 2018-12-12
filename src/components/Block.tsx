@@ -120,8 +120,8 @@ class Block extends React.Component<Props, State> {
 
 const BlockOutline = styled.div<any>`
   visibility: ${(props: any) => (props.isCollapsed ? "hidden" : "initial")};
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
 `;
 
 export default Block;

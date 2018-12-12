@@ -11,8 +11,5 @@ if (env === "production") {
   ROOT = "http://localhost:8089";
 }
 
-console.log('[url.ts] env: ', env)
-console.log('[url.ts] HOST_URL: ', HOST_URL)
-
 export default HOST_URL as string;
 export {ROOT};

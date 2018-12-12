@@ -358,7 +358,7 @@ class App extends React.Component<Props, State> {
           <GameCanvas>
             <Score>your score is {score}. </Score>
             <BlockWrapper>
-              {Array(300)
+              {Array(450)
                 .fill(0)
                 .map((_, idx) => (
                   <Block
