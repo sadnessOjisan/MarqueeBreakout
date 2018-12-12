@@ -240,6 +240,7 @@ class App extends React.Component<Props, State> {
     const user = JSON.parse(String(userString));
     const accessToken: string | null = accessTokenString? JSON.parse(String(accessTokenString)):'';
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    console.log('user: ', user)
     if (!user) {
       // 見ログインかつuser情報を持たない時
       const params: any = splitCurrentURL("#");
