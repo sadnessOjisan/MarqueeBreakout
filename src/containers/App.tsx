@@ -181,6 +181,7 @@ class App extends React.Component<Props, State> {
     const uid = user.sub;
     userAPI.registerUser(uid, user.name);
     localStorage.setItem("user", JSON.stringify(user));
+    
   }
 
   setMarqueeProperty(message: EventObject) {
@@ -235,8 +236,9 @@ class App extends React.Component<Props, State> {
   componentDidMount() {
     const { isLogin } = this.state;
     const userString: string | null = localStorage.getItem("user");
+    const accessToken: string | null = localStorage.getItem("accessToken");
     const user = JSON.parse(String(userString));
-    if (!isLogin && !user) {
+    if (!isLogin && !user && !accessToken) {
       // 見ログインかつuser情報を持たない時
       const params: any = splitCurrentURL("#");
       if (params) {
@@ -246,6 +248,7 @@ class App extends React.Component<Props, State> {
           isLogin: true
         });
         setHeader(id);
+        localStorage.setItem("accessToken", JSON.stringify(id));
         AuthAPI.getProfile((u: UserInfo) => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
       }
     } else {
@@ -328,6 +331,7 @@ class App extends React.Component<Props, State> {
       user: null
     });
     localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
   }
 
   render() {
