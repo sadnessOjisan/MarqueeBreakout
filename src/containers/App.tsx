@@ -250,9 +250,12 @@ class App extends React.Component<Props, State> {
           accessToken: id,
           isLogin: true
         });
-        setHeader(id);
-        localStorage.setItem("accessToken", JSON.stringify(id));
-        axios.defaults.headers.common['Authorization'] = `Bearer ${id}`;
+        console.log('id: ', id)
+        if(id){
+          setHeader(id);
+          localStorage.setItem("accessToken", JSON.stringify(id));
+          axios.defaults.headers.common['Authorization'] = `Bearer ${id}`;
+        }
         AuthAPI.getProfile((u: UserInfo) => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
       }
     } else {
