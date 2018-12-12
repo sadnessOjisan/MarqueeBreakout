@@ -15,7 +15,7 @@ import { splitCurrentURL, setHeader } from "../util/helper";
 import ScoreAPI from "../services/ScoreAPI";
 import Home from "../components/Home";
 import { UserInfo } from "../typedef/User";
-import EventListener from 'react-event-listener';
+import EventListener from "react-event-listener";
 
 const GlobalStyle = createGlobalStyle`
   *,
@@ -119,17 +119,17 @@ class App extends React.Component<Props, State> {
       mode: Mode.normal,
       isLogin: false,
       accessToken: "",
-      bestScore: 0, 
-      user:null
+      bestScore: 0,
+      user: null
     };
   }
 
   handleResize = () => {
-    const h = window.innerHeight
-    const w = window.innerWidth
-    if(h  < 959 || w < 700){
-      alert('画面サイズが小さすぎます. 大きい画面で試してください. ')
-      window.location.href = 'https://www.google.co.jp/'
+    const h = window.innerHeight;
+    const w = window.innerWidth;
+    if (h < 959 || w < 700) {
+      alert("画面サイズが小さすぎます. 大きい画面で試してください. ");
+      window.location.href = "https://www.google.co.jp/";
     }
   };
 
@@ -189,17 +189,17 @@ class App extends React.Component<Props, State> {
     switch (type) {
       case "BAR_SPEED":
         this.setState({
-          barSpeed: Number(value)
+          barSpeed: Number(value) ? Number(value) :1
         });
         break;
       case "BALL_X_SPEED":
         this.setState({
-          ballXSpeed: Number(value)
+          ballXSpeed: Number(value)? Number(value) :1
         });
         break;
       case "BALL_Y_SPEED":
         this.setState({
-          ballYSpeed: Number(value)
+          ballYSpeed: Number(value) > 10 ? Number(value) :10
         });
         break;
       case "BALL_X_BEHAVIOR":
@@ -219,12 +219,12 @@ class App extends React.Component<Props, State> {
         break;
       case "WIDTH":
         this.setState({
-          width: Number(value)
+          width: value? Number(value) :0
         });
         break;
       case "HEIGHT":
         this.setState({
-          height: Number(value)
+          height: value? Number(value) :0
         });
         break;
       default:
@@ -234,11 +234,11 @@ class App extends React.Component<Props, State> {
 
   componentDidMount() {
     const { isLogin } = this.state;
-    const userString:string|null = localStorage.getItem("user")
+    const userString: string | null = localStorage.getItem("user");
     const user = JSON.parse(String(userString));
     if (!isLogin && !user) {
       // 見ログインかつuser情報を持たない時
-      const params:any = splitCurrentURL("#");
+      const params: any = splitCurrentURL("#");
       if (params) {
         const id = params.id_token;
         this.setState({
@@ -246,7 +246,7 @@ class App extends React.Component<Props, State> {
           isLogin: true
         });
         setHeader(id);
-        AuthAPI.getProfile((u:UserInfo) => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
+        AuthAPI.getProfile((u: UserInfo) => this.setUserInfo(u)); // auth0から認証情報を取り出してstateに登録
       }
     } else {
       // user情報をすでに持っていた時
@@ -363,7 +363,7 @@ class App extends React.Component<Props, State> {
                 .map((_, idx) => (
                   <Block
                     ballPosition={ballPosition}
-                    onCollide={(bottom:any) => this.handleClide()}
+                    onCollide={(bottom: any) => this.handleClide()}
                     idx={idx}
                     key={idx}
                   />
@@ -410,6 +410,15 @@ class App extends React.Component<Props, State> {
           onSelect={(obj: EventObject) => this.setMarqueeProperty(obj)}
           onStart={(mode: string) => this.handleClickStartButton(mode)}
           onQuit={() => this.handleGameQuit()}
+          formValues={{
+            barSpeed,
+            ballXSpeed,
+            ballYSpeed,
+            ballXBehavior,
+            ballYBehavior,
+            barBehavior,
+            width
+          }}
         />
         {isModalOpen && mode === Mode.ranking ? (
           <Ranking onClose={() => this.handleCloseModal()} user={user} />

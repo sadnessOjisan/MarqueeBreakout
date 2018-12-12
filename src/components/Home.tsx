@@ -27,7 +27,10 @@ const Home = (props: Props) => {
           </marquee>
         </Title>
         <Description>
-          こちらはクソアプリアドベンドカレンダー13日目の成果物です。サインアップしなくても最下部のコンソールからゲームを始められますが、サインアップすると全国のライバルと競えます。
+          こちらはクソアプリアドベンドカレンダー13日目の成果物です。
+          {/* TODO: brは直すこと */}
+          <br />
+          サインアップしなくても最下部のコンソールからゲームを始められますが、サインアップすると全国のライバルと競えます。
         </Description>
       </Container>
       <StyledButton onClick={handleOpenHow2Use}>遊び方をみる</StyledButton>

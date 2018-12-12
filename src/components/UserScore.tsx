@@ -58,23 +58,23 @@ class UserScore extends React.Component<Props, State> {
       ScoreAPI.registerScore(uid, score);
     }
     this.setState({
-      width:
-        this.contents.current ?
-        this.contents.current.getBoundingClientRect().width:this.state.width,
-      height:
-        this.contents.current ?
-        this.contents.current.getBoundingClientRect().height:this.state.height,
+      width: this.contents.current
+        ? this.contents.current.getBoundingClientRect().width
+        : this.state.width,
+      height: this.contents.current
+        ? this.contents.current.getBoundingClientRect().height
+        : this.state.height,
       confettiSource: {
-        x:
-          this.contents.current ?
-          this.contents.current.getBoundingClientRect().width / 2:this.state.confettiSource.x,
+        x: this.contents.current
+          ? this.contents.current.getBoundingClientRect().width / 2
+          : this.state.confettiSource.x,
         y: 0,
-        w:
-          this.contents.current ?
-          this.contents.current.getBoundingClientRect().width:this.state.confettiSource.w,
-        h:
-          this.contents.current ?
-          this.contents.current.getBoundingClientRect().height:this.state.confettiSource.h,
+        w: this.contents.current
+          ? this.contents.current.getBoundingClientRect().width
+          : this.state.confettiSource.w,
+        h: this.contents.current
+          ? this.contents.current.getBoundingClientRect().height
+          : this.state.confettiSource.h
       }
     });
   }

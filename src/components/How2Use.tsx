@@ -1,5 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
+import Text from "./Text";
 import zIndex from "../constants/zIndex";
 import color from "../constants/color";
 
@@ -17,11 +18,13 @@ const How2Use = (props: Props) => {
           <CloseLink onClick={onClose}>閉じる</CloseLink>
         </ModalHeader>
         <ContentsWrapper>
-          <p>marqueeタグのプロパティを制御することで、ブロック崩しをしよう</p>
-          <p>プロパティは最下部のコンソールから触れるよ</p>
-          <p>数値を変更するだけでプロパティが反映されるよ</p>
-          <p>ブロックを崩すと点数がもらえるよ</p>
-          <p>ログインしていると点数で全国ランクを競えるよ</p>
+          <Text>
+            marqueeタグのプロパティを制御することで、ブロック崩しをしよう
+          </Text>
+          <Text>プロパティは最下部のコンソールから触れるよ</Text>
+          <Text>数値を変更するだけでプロパティが反映されるよ</Text>
+          <Text>ブロックを崩すと点数がもらえるよ</Text>
+          <Text>ログインしていると点数で全国ランクを競えるよ</Text>
         </ContentsWrapper>
       </InnterContainer>
     </ModalWrapper>
@@ -77,6 +80,7 @@ const ContentsWrapper = styled.div`
   overflow-y: scroll;
   height: calc(100% - 56px);
   overflow-y: scroll;
+  padding: 16px;
 `;
 
 export default How2Use;
