@@ -102,7 +102,6 @@ class Block extends React.Component<Props, State> {
         left <= blockState.right &&
         bottom >= blockState.top
       ) {
-        console.log(bottom);
         onCollide(bottom);
         return { isCollapsed: true };
       }

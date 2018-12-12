@@ -146,7 +146,6 @@ class App extends React.Component<Props, State> {
               }
             };
           } else if (mode === Mode.practice) {
-            console.log("[無敵モード]あなたはいま死にました");
           }
         }
         return { isStart: true };

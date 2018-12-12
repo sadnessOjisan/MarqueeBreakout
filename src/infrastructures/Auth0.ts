@@ -4,8 +4,6 @@ import {ROOT} from '../constants/url'
 const AUTHZERO_DOMAIN = process.env.AUTHZERO_DOMAIN ? process.env.AUTHZERO_DOMAIN:''
 const AUTHZERO_CLIENT_ID = process.env.AUTHZERO_CLIENT_ID ? process.env.AUTHZERO_CLIENT_ID:''
 
-console.log('AUTHZERO_CLIENT_ID: ', AUTHZERO_CLIENT_ID)
-
 export default class Auth {
   auth = new auth0.WebAuth({
     domain: AUTHZERO_DOMAIN,
@@ -22,18 +20,14 @@ export default class Auth {
     let userProfile;
     if (!userProfile) {
       if (!token) {
-        console.log("Access Token must exist to fetch profile");
       }
 
       this.auth.client.userInfo(token, (err: any, profile: any) => {
         if (profile) {
           userProfile = profile;
-          console.log(userProfile);
         }
-        console.log(err);
       });
     } else {
-      console.log(userProfile);
     }
   }
 }
@@ -51,7 +45,6 @@ class UserInfoAuth {
     this.auth.parseHash({ hash: window.location.hash }, (err:any, authResult:any) => {
       if(!authResult) return null;
       this.auth.client.userInfo(authResult.accessToken, (err:any, user:any) => {
-        console.log("<this.auth.client.userInfo> user: ", user);
         stateHandler(user)
         return user;
       });
