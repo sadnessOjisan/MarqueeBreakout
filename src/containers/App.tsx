@@ -73,6 +73,7 @@ interface State {
   accessToken: string;
   user: UserInfo | null;
   bestScore: number;
+  isPC: boolean;
 }
 
 interface EventObject {
@@ -121,7 +122,8 @@ class App extends React.Component<Props, State> {
       isLogin: false,
       accessToken: "",
       bestScore: 0,
-      user: null
+      user: null, 
+      isPC: true
     };
   }
 
@@ -237,11 +239,12 @@ class App extends React.Component<Props, State> {
   componentDidMount() {
     const h = window.innerHeight;
     const w = window.innerWidth;
-    console.log(w)
-    console.log(h)
     if (h < 500 || w < 930) {
       alert("画面サイズが小さすぎます. 大きい画面で試してください. ");
-      window.location.href = "https://www.google.co.jp/";
+      this.setState({
+        isPC: false
+      }
+      )
     }
     const userString: string | null = localStorage.getItem("user");
     const accessTokenString: string | null = localStorage.getItem("accessToken");
@@ -365,13 +368,14 @@ class App extends React.Component<Props, State> {
       score,
       mode,
       user,
-      bestScore
+      bestScore, 
+      isPC
     } = this.state;
     return (
       <Wrapper>
         <EventListener target="window" onResize={this.handleResize} />
         <GlobalStyle />
-        {isStart && (mode === Mode.normal || mode === Mode.practice) ? (
+        {isPC && isStart && (mode === Mode.normal || mode === Mode.practice) ? (
           <GameCanvas>
             <Score>your score is {score}. </Score>
             <BlockWrapper>
