@@ -237,7 +237,7 @@ class App extends React.Component<Props, State> {
   componentDidMount() {
     const h = window.innerHeight;
     const w = window.innerWidth;
-    if (h < 959 || w < 700) {
+    if (h < 300 || w < 300) {
       alert("画面サイズが小さすぎます. 大きい画面で試してください. ");
       window.location.href = "https://www.google.co.jp/";
     }
