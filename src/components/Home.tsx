@@ -27,7 +27,7 @@ const Home = (props: Props) => {
           </marquee>
         </Title>
         <Description>
-          こちらはクソアプリアドベンドカレンダー13日目の成果物です。
+          こちらは<a href='https://qiita.com/sadnessOjisan/private/51bb949466fdd065a5a6'>クソアプリアドベンドカレンダー13日目</a>の成果物です。
           {/* TODO: brは直すこと */}
           <br />
           サインアップしなくても最下部のコンソールからゲームを始められますが、サインアップすると全国のライバルと競えます。

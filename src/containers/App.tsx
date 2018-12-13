@@ -235,12 +235,17 @@ class App extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    const h = window.innerHeight;
+    const w = window.innerWidth;
+    if (h < 959 || w < 700) {
+      alert("画面サイズが小さすぎます. 大きい画面で試してください. ");
+      window.location.href = "https://www.google.co.jp/";
+    }
     const userString: string | null = localStorage.getItem("user");
     const accessTokenString: string | null = localStorage.getItem("accessToken");
     const user = JSON.parse(String(userString));
     const accessToken: string | null = accessTokenString? JSON.parse(String(accessTokenString)):'';
     axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    console.log('user: ', user)
     if (!user) {
       // 見ログインかつuser情報を持たない時
       const params: any = splitCurrentURL("#");
@@ -250,7 +255,6 @@ class App extends React.Component<Props, State> {
           accessToken: id,
           isLogin: true
         });
-        console.log('id: ', id)
         if(id){
           setHeader(id);
           localStorage.setItem("accessToken", JSON.stringify(id));
