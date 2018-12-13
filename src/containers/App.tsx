@@ -129,7 +129,7 @@ class App extends React.Component<Props, State> {
     const h = window.innerHeight;
     const w = window.innerWidth;
     if (h < 959 || w < 700) {
-      alert("画面サイズが小さすぎます. 大きい画面で試してください. ");
+      alert("画面サイズを変更しないでください");
       window.location.href = "https://www.google.co.jp/";
     }
   };
@@ -237,7 +237,9 @@ class App extends React.Component<Props, State> {
   componentDidMount() {
     const h = window.innerHeight;
     const w = window.innerWidth;
-    if (h < 930 || w < 500) {
+    console.log(w)
+    console.log(h)
+    if (h < 500 || w < 930) {
       alert("画面サイズが小さすぎます. 大きい画面で試してください. ");
       window.location.href = "https://www.google.co.jp/";
     }
